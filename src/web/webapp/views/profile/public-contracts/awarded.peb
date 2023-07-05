@@ -1,0 +1,38 @@
+{% extends "profile/public-contracts/layout" %}
+{% set selectedView = 'Awarded' %}
+
+{% block publicContracts %}
+    <div>
+        {% if not publicContracts.contracts.isEmpty() %}
+            <div class="text-lg">
+                {{ plural(publicContracts.contracts.size, "Contract", "Contracts") }}
+                with a total value of
+                <span class="font-semibold">{{ currencyValue(publicContracts.totalValue, "GBP") }}</span>
+            </div>
+            <table class="data-listing mt-6">
+                <tr class="header">
+                    <td width="100%">Contract</td>
+                    <td>Value</td>
+                </tr>
+                {% for contract in publicContracts.contracts %}
+                    <tr>
+                        <td>
+                            <div class="flex flex-col">
+                                <div>
+                                    {{ contract.buyer.name }}
+{#                                    {{ jsonLink("gb-public-contracts", contract.id) }}#}
+                                </div>
+                                <div class="text-xs text-slate-500">{{ contract.tender.title }}</div>
+                            </div>
+                        </td>
+                        <td align="right">
+                            {{ currencyValue(contract.value, "GBP") }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="text-sm text-label mt-2">No public contracts found for target</div>
+        {% endif %}
+    </div>
+{% endblock %}

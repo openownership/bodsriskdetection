@@ -1,0 +1,14 @@
+package org.bodsrisk.service.risk
+
+import jakarta.inject.Singleton
+import org.bodsrisk.model.EntityType
+import org.bodsrisk.model.RelatedEntityRelationship
+
+@Singleton
+class ChildrenRisksResolver : RelatedRiskResolver() {
+
+    override val entityTypes = setOf(EntityType.LEGAL_ENTITY, EntityType.PERSON)
+    override val relationshipType = RelatedEntityRelationship.CHILD
+    override val order = 2
+    override val findQueryPath = "sparql/risk/find-risks-for-children.sparql"
+}

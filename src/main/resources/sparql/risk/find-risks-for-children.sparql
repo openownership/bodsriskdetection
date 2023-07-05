@@ -1,0 +1,9 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX ftm: <https://w3id.org/ftm#>
+
+SELECT ?riskEntity ?relationship (GROUP_CONCAT(DISTINCT ?topic;separator=",") as ?risks)
+WHERE {
+    ?target bods:ownsOrControls+ ?riskEntity .
+    ?riskEntity ftm:Thing:topics ?topic .
+}
+GROUP BY ?riskEntity ?relationship

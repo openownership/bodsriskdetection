@@ -1,0 +1,13 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsrisk: <http://bods.openownership.org/risk/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+
+SELECT DISTINCT ?target ?type
+WHERE {
+    ?target bods:ownsOrControls+ ?company .
+    ?target rdf:type ?type .
+    ?company bodsrisk:awardedPublicContract ?c .
+    FILTER(STRSTARTS(STR(?target), STR(bodsr:)))
+    FILTER(SAMETERM(?type, bods:Entity) || SAMETERM(?type, bods:Person))
+}

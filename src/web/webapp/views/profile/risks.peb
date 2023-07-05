@@ -1,0 +1,74 @@
+{% extends "profile/layout-profile" %}
+{% set selectedTab = 'Risks' %}
+
+{% import "macros/utils.peb" %}
+
+{% block profileContent %}
+    <div class="flex flex-col pt-6">
+        <h2>Direct risks</h2>
+        {% if riskProfile != null %}
+            <details class="group mt-6">
+                <summary class="flex cursor-pointer list-none items-center gap-1 font-medium select-none">
+                    {{ riskPills(riskProfile.risks) }}
+                    <span class="font-medium ml-4">Details</span>
+                    <span class="transition group-open:rotate-180">
+                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor"
+                     stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path
+                            d="M6 9l6 6 6-6"></path></svg>
+              </span>
+                </summary>
+                <div class="flex flex-col gap-2 mt-4 text-sm">
+                    {% for note in riskProfile.notes %}
+                        <div>{{ note }}</div>
+                    {% endfor %}
+                </div>
+            </details>
+        {% else %}
+            <div class="flex flex-col items-start gap-2 mt-4">
+                <div class="risk-pill green">No risks found</div>
+            </div>
+        {% endif %}
+
+        <h2 class="mt-16">Related entities</h2>
+        {% if not relatedEntities.isEmpty() %}
+            <table class="data-listing">
+                <tr class="header">
+                    <td>Entity</td>
+                    <td width="100%">Risks</td>
+                    <td>Relationship</td>
+                </tr>
+                {% for relatedEntity in relatedEntities %}
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex flex-row items-center gap-2">
+                                <a href="/profile/{{ relatedEntity.entity.id | urlencode }}/risks" class="font-medium">
+                                    {{ relatedEntity.entity.name }}
+                                </a>
+                                {{ jsonLink("open-ownership", relatedEntity.entity.id) }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex flex-row gap-2">
+                                {% for risk in relatedEntity.data %}
+                                    <div class="risk-pill {{ risk.level.name | lower }}">{{ risk.label }}</div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap text-sm">
+                            <a href="#"
+                               onclick="explainRelationshipModal('{{ target.id }}', '{{ relatedEntity.relationship }}', '{{ relatedEntity.entity.id }}', '{{ relatedEntity.intermediateEntity }}'); return false;">
+                                {{ relatedEntity.relationshipLabel(target.type) }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="flex flex-col items-start gap-2 mt-4">
+                <div class="risk-pill green">No risks found</div>
+                <div class="text-sm text-label">No risks found for related entities</div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

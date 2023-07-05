@@ -1,0 +1,28 @@
+{% extends "profile/layout-profile" %}
+{% set selectedTab = 'Public contracts' %}
+
+{% import "macros/utils.peb" %}
+
+{% block profileContent %}
+    <div class="flex flex-col pt-4 items-center">
+        <div class="flex flex-col max-w-screen-lg items-start w-full mb-6">
+            <div class="pill-menu">
+                {% if target.type.name == 'LEGAL_ENTITY' %}
+                    <a href="/profile/{{ target.id | urlencode }}/public-contracts"
+                       class="{{ selectedView == "Awarded" ? 'selected' : '' }}">Awarded</a>
+                    <a href="/profile/{{ target.id | urlencode }}/public-contracts/related-entities"
+                       class="{{ selectedView == "Subsidiaries" ? 'selected' : '' }}">Subsidiaries</a>
+                {% else %}
+                    <a href="/profile/{{ target.id | urlencode }}/public-contracts/related-entities"
+                       class="{{ selectedView == "Subsidiaries" ? 'selected' : '' }}">Controlled companies</a>
+                {% endif %}
+
+                <a href="/profile/{{ target.id | urlencode }}/public-contracts/network"
+                   class="{{ selectedView == "Network" ? 'selected' : '' }}">
+                    Network view
+                </a>
+            </div>
+        </div>
+    </div>
+    {% block publicContracts %}{% endblock %}
+{% endblock %}

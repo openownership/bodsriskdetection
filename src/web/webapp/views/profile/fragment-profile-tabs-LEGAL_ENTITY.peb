@@ -1,0 +1,7 @@
+<a href="/profile/{{ target.id | urlencode }}/risks" class="{{ selectedTab == 'Risks' ? 'selected' : '' }}">Risks</a>
+<a href="/profile/{{ target.id | urlencode }}/public-contracts"
+   class="{{ selectedTab == 'Public contracts' ? 'selected' : '' }}">Public contracts</a>
+<a href="/profile/{{ target.id | urlencode }}/ubos" class="{{ selectedTab == 'UBOs' ? 'selected' : '' }}">UBOs</a>
+<a href="/profile/{{ target.id | urlencode }}/child-companies" class="{{ selectedTab == 'child-companies' ? 'selected' : '' }}">Subsidiaries</a>
+<a href="/profile/{{ target.id | urlencode }}/parent-companies" class="{{ selectedTab == 'Parent companies' ? 'selected' : '' }}">Parent companies</a>
+<a href="/profile/{{ target.id | urlencode }}/corporate-group" class="{{ selectedTab == 'Corporate group' ? 'selected' : '' }}">Corporate group</a>

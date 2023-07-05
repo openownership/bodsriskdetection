@@ -1,0 +1,104 @@
+.network {
+    @apply flex rounded-2xl overflow-hidden;
+}
+
+.network #network-canvas {
+    @apply fill-page;
+}
+
+.network #arrow {
+    @apply fill-slate-500;
+}
+
+.network #arrow.blurred {
+    @apply opacity-0;
+}
+
+.network .relationship-text-container {
+    @apply flex flex-col justify-center h-full pl-2;
+}
+
+.network .relationship {
+    @apply stroke-slate-500 stroke-2 fill-none;
+}
+
+.network .relationship.hovered {
+    @apply stroke-red-500;
+}
+
+.network .relationship-text {
+    @apply text-sm text-label;
+}
+
+.network .extra-node-relationship {
+    @apply items-center;
+}
+
+.network .node-circle {
+    @apply cursor-pointer;
+}
+
+.network .node-circle circle {
+    @apply fill-white stroke-copy stroke-[1pt] cursor-pointer;
+}
+
+.network .node.blurred circle,
+.network .node.blurred .label .text a,
+.network .node.blurred.highlighted .node-circle circle {
+    @apply stroke-slate-200 fill-slate-100 text-slate-200;
+}
+
+.network .relationship.blurred {
+    @apply stroke-slate-200;
+}
+
+.network .relationship.blurred .relationship-text {
+    @apply text-slate-200;
+}
+
+.network .node.blurred image,
+.network .node.blurred .tag {
+    @apply opacity-10;
+}
+
+.network .node.hovered circle,
+.network .node.highlighted.hovered circle {
+    @apply fill-red-500 stroke-red-500;
+}
+
+.network .node.highlighted .node-circle circle {
+    @apply fill-sky-700 stroke-sky-700;
+}
+
+.network .node .label {
+    @apply flex flex-col items-start justify-center h-full ml-2;
+}
+
+.network .node .label.left-of-circle {
+    @apply items-end;
+}
+
+.network .node .label .text {
+    @apply font-semibold;
+}
+
+.network .node .label .text a {
+    @apply text-copy hover:text-control;
+}
+
+.network .node. label .tags {
+    @apply flex flex-row items-center gap-1;
+}
+
+.network .node .tag {
+    @apply rounded-full px-2 py-0.5 text-white font-medium whitespace-nowrap text-sm
+    hover:no-underline hover:opacity-80;
+}
+
+.network .node .tag.red {
+    @apply bg-red-700;
+}
+
+.network .node .tag.amber {
+    @apply bg-orange-400 font-semibold;
+}

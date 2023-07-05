@@ -1,0 +1,9 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+PREFIX bodsrisk: <http://bods.openownership.org/risk/>
+
+SELECT DISTINCT ?contract
+WHERE {
+    ?target bodsrisk:awardedPublicContract ?contract .
+}
+

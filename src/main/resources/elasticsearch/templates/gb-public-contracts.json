@@ -1,0 +1,30 @@
+{
+    "index_patterns": [
+        "gb-public-contracts*"
+    ],
+    "template": {
+        "mappings": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                },
+                "awards": {
+                    "type": "object",
+                    "properties": {
+                        "suppliers": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "text"
+                                },
+                                "registrationNumber": {
+                                    "type": "keyword"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

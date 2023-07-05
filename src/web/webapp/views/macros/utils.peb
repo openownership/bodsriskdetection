@@ -1,0 +1,67 @@
+{% macro inlineSvg(name, css) %}
+    <div class="{{ css }}">
+        {% include "inline-svg/#{name}" %}
+    </div>
+{% endmacro %}
+
+{% macro plural(count, singularText, pluralText) %}
+    {{ count }} {% if count > 1 %}{{ pluralText }}{% else %}{{ singularText }}{% endif %}
+{% endmacro %}
+
+{% macro riskPills(risks) %}
+    <div class="flex flex-row gap-2">
+        {% if risks.isEmpty() %}
+            <div class="risk-pill green">No risks found</div>
+        {% else %}
+            {% for risk in risks %}
+                <div class="risk-pill {{ risk.level.name | lower }}">{{ risk.label }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro modal(id) %}
+    <div class="modal">
+        <div class="modal-dialog max-w-screen-sm">
+            <div class="modal-title flex flex-row justify-between items-center">
+                <div>Relationship details</div>
+                <a href="#" class="modal-close rounded-lg bg-slate-100 p-2 group">
+                    {{ inlineSvg("close.svg", "fill-slate-400 group-hover:fill-control w-4 h-4") }}
+                </a>
+            </div>
+            <div class="modal-content network" id="{{ id }}">
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro jsonLink(type, id) %}
+    <a href="http://localhost:9200/{{ type }}/_doc/{{ id }}" class="text-xs text-slate-400" target="_blank">json</a>
+{% endmacro %}
+
+{% macro entityHeaderLg(entity) %}
+    <div class="flex flex-row items-center gap-3">
+        <div class="rounded-full bg-slate-600">
+            {{ inlineSvg("entity-#{entity.type}.svg", "fill-copy w-10 h-10") }}
+        </div>
+        <h1>{{ entity.name }}</h1>
+    </div>
+{% endmacro %}{
+
+{% macro entityHeader(entity) %}
+    <div class="flex flex-row items-center gap-2">
+        <div class="rounded-full bg-slate-600">
+            {{ inlineSvg("entity-#{entity.type}.svg", "fill-copy w-8 h-8") }}
+        </div>
+        <div class="font-semibold text-lg">{{ entity.name }}</div>
+    </div>
+{% endmacro %}
+
+{% macro nationalities(statement) %}
+    {% if statement.json.array("nationalities") != null %}
+        Nationality
+        {% for nationality in statement.json.array("nationalities") %}
+            <span class="font-medium">{{ country(nationality.code).name }}</span>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}

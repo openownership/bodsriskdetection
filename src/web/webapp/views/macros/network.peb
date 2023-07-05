@@ -1,0 +1,8 @@
+{% macro tree(treeJsonString, emptyText, reverse, css = "") %}
+    <div class="network {{ css }}"></div>
+    {% if reverse %}
+        <script>new network.createReverseTree({{ treeJsonString | raw }}, ".network", "{{emptyText}}");</script>
+    {% else %}
+        <script>new network.createTree({{ treeJsonString | raw }}, ".network", "{{emptyText}}");</script>
+    {% endif %}
+{% endmacro %}

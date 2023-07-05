@@ -1,0 +1,18 @@
+.pagination .page {
+    @apply px-3 py-1.5 rounded-md;
+}
+
+.pagination a.page {
+    @apply hover:no-underline hover:bg-control/[0.7] hover:text-white
+}
+
+.pagination .page.ellipsis {
+    @apply text-slate-400;
+}
+.pagination .page.selected {
+    @apply bg-control text-white;
+}
+
+.pagination .page.disabled {
+    @apply text-slate-400;
+}

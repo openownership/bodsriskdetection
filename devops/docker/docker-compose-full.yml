@@ -1,0 +1,11 @@
+services:
+  elasticsearch:
+    container_name: bods-risk-elasticsearch
+    image: "${ELASTICSEARCH_FULL}"
+    ports:
+      - 9200:9200
+  graphdb:
+    container_name: bods-risk-graphdb
+    image: "${GRAPHDB_FULL}"
+    ports:
+      - 7200:7200

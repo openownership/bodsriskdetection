@@ -1,0 +1,9 @@
+{% extends "profile/layout-profile" %}
+{% set selectedTab = 'Parent companies' %}
+{% set wide = true %}
+
+{% import "macros/network.peb" %}
+
+{% block profileContent %}
+    {{ tree(content, "No parent companies found", true, "h-screen") }}
+{% endblock %}

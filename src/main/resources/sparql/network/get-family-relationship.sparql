@@ -1,0 +1,8 @@
+PREFIX ftm: <https://w3id.org/ftm#>
+
+SELECT DISTINCT ?relationship
+WHERE {
+    ?rel ftm:Family:person ?from .
+    ?rel ftm:Family:relative ?to .
+    ?rel ftm:Family:relationship ?relationship .
+}

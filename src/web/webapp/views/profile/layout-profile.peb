@@ -1,0 +1,35 @@
+{% extends "layout-base" %}
+{% set headerMenuItem = 'Search' %}
+{% set pageTitle = target.name %}
+
+{% import "macros/utils.peb" %}
+
+{% block pageContent %}
+    <div class="w-full flex flex-col items-center border-b border-slate-300 pt-8 bg-white">
+        <div class="max-w-screen-lg flex flex-col w-full">
+            <div class="flex flex-row items-center justify-between w-full">
+                {{ entityHeaderLg(target) }}
+                <div class="flex flex-col">
+                    <div class="flex flex-col items-end text-sm text-label">
+                        {% if target.statementType.name == 'PERSON' %}
+                            <div class="font-light">Born <span class="font-medium">{{ target.json.string("birthDate") }}</span></div>
+                            <div class="font-light">Nationality <span class="font-medium"> {{ country(target.json.array("nationalities")[0].code).name | default ("Unknown") }}</span></div>
+                        {% endif %}
+
+                        {% if target.statementType.name == 'ENTITY' and target.jurisdictionCode != null %}
+                            <div>{{ country(target.jurisdictionCode).name | default ("Unknown")}}</div>
+                            <div>{{ target.identifier("GB-COH") }}</div>
+                        {% endif %}
+{#                        <div class="mb-0.5">{{ jsonLink("open-ownership", target.id) }}</div>#}
+                    </div>
+                </div>
+            </div>
+            <div class="tabs mt-6">
+                {% include "profile/fragment-profile-tabs-#{target.type}" %}
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 w-full {{ not wide ? 'max-w-screen-lg' : 'px-10'}}">
+        {% block profileContent %} {% endblock %}
+    </div>
+{% endblock %}

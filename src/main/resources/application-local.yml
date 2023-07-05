@@ -1,0 +1,4 @@
+micronaut:
+  views:
+    pebble:
+      cache-active: false

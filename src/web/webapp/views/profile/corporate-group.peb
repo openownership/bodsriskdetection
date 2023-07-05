@@ -1,0 +1,9 @@
+{% extends "profile/layout-profile" %}
+{% set selectedTab = 'Corporate group' %}
+{% set wide = true %}
+
+{% import "macros/network.peb" %}
+
+{% block profileContent %}
+    {{ tree(content, "No corporate group data", false, "h-screen") }}
+{% endblock %}

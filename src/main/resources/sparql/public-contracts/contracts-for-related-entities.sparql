@@ -1,0 +1,12 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+PREFIX bodsrisk: <http://bods.openownership.org/risk/>
+
+SELECT ?relatedEntity ?contract
+WHERE {
+    ?target bods:ownsOrControls+ ?relatedEntity .
+
+    ?relatedEntity bodsrisk:awardedPublicContract ?contract .
+    FILTER(STRSTARTS(STR(?relatedEntity), STR(bodsr:)))
+}
+GROUP BY ?relatedEntity ?contract

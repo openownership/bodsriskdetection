@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply text-base font-app text-copy;
+}
+
+h1 {
+    @apply text-3xl font-semibold;
+}
+
+h2 {
+    @apply text-2xl font-semibold;
+}
+
+h3 {
+    @apply text-xl font-semibold;
+}
+
+a {
+    @apply text-control hover:underline;
+}
+
+.header-menu .item {
+    @apply px-4 pt-5 pb-4 text-sm text-white border-b-4 border-header
+    hover:text-control-darkbg hover:no-underline;
+}
+
+input[type=text], input[type=password], input[type=email], input[type=date], input[type=number] {
+    @apply px-3 py-2 rounded-full border border-slate-200
+    focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-control focus:ring-opacity-50;
+}
+
+.header-menu .item.selected {
+    @apply border-control-darkbg text-control-darkbg;
+}
+
+.search {
+    @apply flex flex-row items-start w-full max-w-screen-md;
+}
+
+.search.small {
+    @apply w-[600px];
+}
+
+.search input[type=text] {
+    @apply pl-6 py-3 text-xl -mr-14 placeholder:font-light w-full block;
+}
+
+.switch {
+    @apply flex flex-row items-center p-0.5 gap-0.5 rounded-full text-xs bg-gray-200;
+}
+
+.switch a {
+    @apply flex flex-row items-center px-4 py-1 rounded-full text-slate-500 font-medium
+    hover:bg-white hover:no-underline hover:text-control;
+}
+
+.switch a.selected {
+    @apply bg-white fill-control text-control;
+}
+
+.switch a.selected svg {
+    @apply fill-control;
+}
+
+.tooltip {
+    @apply whitespace-normal rounded drop-shadow bg-copy text-white px-4 py-3 pointer-events-none absolute left-0 opacity-0 group-hover:opacity-100;
+    z-index: 100;
+}
+
+table.data-listing {
+    @apply w-full;
+    border-spacing: 0;
+}
+
+table.data-listing td {
+    @apply py-3;
+}
+
+table.data-listing td {
+    @apply border-b border-slate-200;
+}
+
+table.data-listing.no-header td {
+    @apply border-t border-slate-200;
+}
+
+table.data-listing td:not(:first-child) {
+    @apply px-8;
+}
+
+table.data-listing tr.header td {
+    @apply text-sm text-slate-500 py-2 whitespace-nowrap;
+}
+
+.pill-menu {
+    @apply flex flex-row items-center gap-2 text-sm;
+}
+
+.pill-menu a {
+    @apply flex flex-row items-center px-4 py-1 rounded-full text-copy font-medium border border-slate-300
+    hover:bg-control hover:no-underline hover:text-white hover:border-control;
+}
+
+.pill-menu a.selected {
+    @apply bg-control text-white border-control;
+}
+
+.pill-menu a.selected svg {
+    @apply fill-control;
+}

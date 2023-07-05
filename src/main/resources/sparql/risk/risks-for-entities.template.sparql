@@ -1,0 +1,8 @@
+PREFIX ftm: <https://w3id.org/ftm#>
+
+SELECT ?entity (GROUP_CONCAT(DISTINCT ?topic;separator=",") as ?risks)
+WHERE {
+    VALUES ?entity { ENTITIES }
+    ?entity ftm:Thing:topics ?topic .
+}
+GROUP BY ?entity

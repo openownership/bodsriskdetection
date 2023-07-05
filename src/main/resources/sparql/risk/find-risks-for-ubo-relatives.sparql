@@ -1,0 +1,15 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+PREFIX ftm: <https://w3id.org/ftm#>
+
+SELECT ?riskEntity ?relationship ?intermediateEntity (GROUP_CONCAT(DISTINCT ?topic;separator=",") as ?risks)
+WHERE {
+    ?rel ftm:Family:person ?riskEntity .
+    ?rel ftm:Family:relative ?intermediateEntity .
+
+    ?intermediateEntity bods:ownsOrControls+ ?target .
+
+    ?riskEntity ftm:Thing:topics ?topic .
+    FILTER(STRSTARTS(STR(?intermediateEntity), STR(bodsr:)))
+}
+GROUP BY ?riskEntity ?relationship ?intermediateEntity

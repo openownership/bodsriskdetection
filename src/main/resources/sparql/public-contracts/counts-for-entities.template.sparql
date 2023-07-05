@@ -1,0 +1,9 @@
+PREFIX ftm: <https://w3id.org/ftm#>
+PREFIX bodsrisk: <http://bods.openownership.org/risk/>
+
+SELECT ?entity (COUNT(?contract) as ?publicContracts)
+WHERE {
+    VALUES ?entity { ENTITIES }
+    ?entity bodsrisk:awardedPublicContract ?contract .
+}
+GROUP BY ?entity
