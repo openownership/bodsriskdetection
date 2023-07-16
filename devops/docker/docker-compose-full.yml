@@ -1,11 +1,11 @@
 services:
   elasticsearch:
     container_name: bods-risk-elasticsearch
-    image: "${ELASTICSEARCH_FULL}"
+    image: "cosmarginean/bods-risk-elasticsearch:latest"
     ports:
       - 9200:9200
   graphdb:
     container_name: bods-risk-graphdb
-    image: "${GRAPHDB_FULL}"
+    image: "cosmarginean/bods-risk-graphdb:latest"
     ports:
       - 7200:7200

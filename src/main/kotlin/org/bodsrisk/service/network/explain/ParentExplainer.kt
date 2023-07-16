@@ -15,6 +15,7 @@ class ParentExplainer : RelationshipExplainer(RelatedEntityRelationship.PARENT) 
         intermediateEntity: IRI?
     ): RelationshipExplanation {
         return RelationshipExplanation(
+            root = target,
             graph = networkService.relationshipChain(relatedEntity, target),
             graphType = GraphType.ReverseTree,
             relevantNodes = setOf(target, relatedEntity)

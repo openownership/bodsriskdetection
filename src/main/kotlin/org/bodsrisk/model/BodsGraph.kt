@@ -16,6 +16,7 @@ data class BodsNodeData(
 )
 
 typealias BodsGraph = Graph<BodsNodeData>
+fun emptyBodsGraph() = Graph.empty<BodsNodeData>()
 
 /**
  * This is rather dirty. The reason is that we want to keep the core queries that produce the graph

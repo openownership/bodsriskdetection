@@ -6,9 +6,9 @@ import jakarta.inject.Singleton
 import org.bodsrisk.model.BodsNodeData
 import org.bodsrisk.model.RelatedEntityRelationship
 import org.bodsrisk.model.graph.GraphNode
-import org.bodsrisk.service.risk.RiskService
 import org.bodsrisk.service.network.GraphType
 import org.bodsrisk.service.network.RelationshipExplanation
+import org.bodsrisk.service.risk.RiskService
 import org.eclipse.rdf4j.model.IRI
 
 @Singleton
@@ -27,6 +27,7 @@ class UboRelativeExplainer : RelationshipExplainer(RelatedEntityRelationship.UBO
         val risks = riskService.risksForEntity(relatedEntity)
 
         return RelationshipExplanation(
+            root = target,
             graph = networkService.relationshipChain(intermediateEntity, target),
             graphType = GraphType.ReverseTree,
             relevantNodes = setOf(target, relatedEntity),

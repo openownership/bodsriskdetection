@@ -7,9 +7,10 @@ import org.bodsrisk.rdf.asStrings
 import org.eclipse.rdf4j.model.IRI
 
 data class RelationshipExplanation(
+    val root: IRI,
     val graph: BodsGraph,
     val graphType: GraphType,
-    val relevantNodes: Set<IRI>,
+    val relevantNodes: Set<IRI> = emptySet(),
     val extraNode: GraphNode<BodsNodeData>? = null,
     val extraNodeRelationshipDetails: List<String> = emptyList(),
     val intermediateEntity: String? = null

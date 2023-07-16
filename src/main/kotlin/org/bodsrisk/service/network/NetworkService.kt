@@ -1,5 +1,6 @@
 package org.bodsrisk.service.network
 
+import io.slink.id.uuid
 import jakarta.inject.Singleton
 import org.bodsrisk.model.*
 import org.bodsrisk.model.graph.Graph
@@ -7,8 +8,9 @@ import org.bodsrisk.model.graph.GraphNode
 import org.bodsrisk.model.graph.Relationship
 import org.bodsrisk.rdf.allValues
 import org.bodsrisk.rdf.asStrings
-import org.bodsrisk.service.risk.RiskService
+import org.bodsrisk.rdf.vocabulary.BodsRisk
 import org.bodsrisk.service.entityresolver.EntityResolver
+import org.bodsrisk.service.risk.RiskService
 import org.eclipse.rdf4j.model.IRI
 import org.eclipse.rdf4j.query.BindingSet
 import org.eclipse.rdf4j.repository.Repository
@@ -42,8 +44,43 @@ class NetworkService(
             .addNodeData(riskService, rdfRepository)
     }
 
+    fun sameAddressGraph(entity1: IRI, entity2: IRI): BodsGraph {
+        val node1 = GraphNode(entity = entityResolver.resolveEntity(entity1)!!, BodsNodeData())
+        val node2 = GraphNode(entity = entityResolver.resolveEntity(entity2)!!, BodsNodeData())
+
+        val fullAddress = rdfRepository.sparqlSelectClasspath(
+            "sparql/network/get-common-registered-address.sparql",
+            "entity1" to entity1,
+            "entity2" to entity2,
+        ).first()
+            .str("fullAddress")
+
+        val addressId = BodsRisk.entity(uuid())
+        val address = GraphNode(
+            entity = Entity(addressId, fullAddress, EntityType.REGISTERED_ADDRESS, DataSource.OpenOwnership),
+            BodsNodeData()
+        )
+
+        val sameAddressGraph = BodsGraph(
+            nodes = listOf(node1, node2, address),
+            relationships = setOf(
+                Relationship(
+                    parentId = entity1.toString(),
+                    childId = addressId.toString(),
+                    listOf("Registered address")
+                ),
+                Relationship(
+                    parentId = entity2.toString(),
+                    childId = addressId.toString(),
+                    listOf("Registered address")
+                )
+            )
+        )
+        return sameAddressGraph.addNodeData(riskService, rdfRepository)
+    }
+
     fun parentCompanies(target: IRI): BodsGraph {
-        var graph = Graph.empty<BodsNodeData>()
+        var graph = emptyBodsGraph()
         val ultimateParents = ultimateParents(target)
         ultimateParents.forEach { ultimateParentId ->
             graph += childCompanies(ultimateParentId)
@@ -54,7 +91,7 @@ class NetworkService(
     }
 
     fun corporateGroup(target: IRI): CorporateGroup {
-        var graph = Graph.empty<BodsNodeData>()
+        var graph = emptyBodsGraph()
         val ultimateParents = ultimateParents(target)
         ultimateParents.forEach { ultimateParentId ->
             graph += childCompanies(ultimateParentId)

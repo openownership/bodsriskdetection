@@ -24,7 +24,7 @@ data class ExplainRelationshipResponse(
                 relationshipDirection = ExtraNode.Direction.INCOMING
             )
         }
-        TreeResponse.fromGraph(target.toString(), explanation.graph, explanation.relevantNodesStr, extraNode)
+        TreeResponse.fromGraph(explanation.root.toString(), explanation.graph, explanation.relevantNodesStr, extraNode)
     }
 
     val reverse = explanation.graphType == GraphType.ReverseTree

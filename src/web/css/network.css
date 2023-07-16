@@ -82,6 +82,10 @@
     @apply font-semibold;
 }
 
+.network .node .label.registered_address .text {
+    @apply text-sm;
+}
+
 .network .node .label .text a {
     @apply text-copy hover:text-control;
 }
