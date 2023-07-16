@@ -6,7 +6,8 @@ enum class RelatedEntityRelationship {
     PARENT,
     CHILD,
     UBO_RELATIVE,
-    UBO_ASSOCIATE;
+    UBO_ASSOCIATE,
+    REGISTERED_ADDRESS;
 
     fun label(targetType: EntityType, relatedEntityType: EntityType): String {
         return I18n.get("relatedEntities.${targetType}.${this.name}.${relatedEntityType}")

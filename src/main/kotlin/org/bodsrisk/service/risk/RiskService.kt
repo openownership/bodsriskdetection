@@ -8,6 +8,7 @@ import org.bodsrisk.model.risk.Risk
 import org.bodsrisk.model.risk.RiskProfile
 import org.bodsrisk.model.risk.Risks
 import org.bodsrisk.rdf.templateEntitiesQuery
+import org.bodsrisk.service.risk.indirect.IndirectRiskResolver
 import org.eclipse.rdf4j.model.IRI
 import org.eclipse.rdf4j.repository.Repository
 import org.rdf4k.iri
@@ -18,7 +19,7 @@ import org.rdf4k.str
 class RiskService(
     private val rdfRepository: Repository,
     private val openSanctionsDataset: OpenSanctionsDataset,
-    relatedRiskResolvers: List<RelatedRiskResolver>
+    relatedRiskResolvers: List<IndirectRiskResolver>
 ) {
 
     private val riskResolvers = relatedRiskResolvers.sortedBy { it.order }

@@ -1,0 +1,15 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+PREFIX bodsrisk: <http://bods.openownership.org/risk/>
+PREFIX ftm: <https://w3id.org/ftm#>
+
+SELECT ?target
+WHERE {
+    ?target bodsrisk:registeredAddress/bodsrisk:fullAddress ?fullAddress .
+    ?riskEntity bodsrisk:registeredAddress/bodsrisk:fullAddress ?fullAddress .
+    ?riskEntity ftm:Thing:topics ?topic .
+
+    FILTER(NOT EXISTS { ?target ftm:Thing:topics ?t . })
+    FILTER(STRSTARTS(STR(?target), STR(bodsr:)))
+}
+LIMIT 100

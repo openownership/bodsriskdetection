@@ -19,8 +19,9 @@ data class ExplainRelationshipResponse(
                 relatedTo = explanation.intermediateEntity!!,
                 node = explanation.extraNode,
                 relationshipDetails = explanation.extraNodeRelationshipDetails,
-                relationshipDirection = ExtraNode.Direction.OUTGOING
-                // Using OUTGOING in all cases for now, as we query the relationship from extraNode. From Relative to UBO, for example
+
+                // Using INCOMING in all cases for now, as we query the relationship from root to extraNode. From UBO to Relative, for example.
+                relationshipDirection = ExtraNode.Direction.INCOMING
             )
         }
         TreeResponse.fromGraph(target.toString(), explanation.graph, explanation.relevantNodesStr, extraNode)

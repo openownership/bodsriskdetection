@@ -1,4 +1,4 @@
-package org.bodsrisk.service.risk
+package org.bodsrisk.service.risk.indirect
 
 import jakarta.inject.Inject
 import org.bodsrisk.model.EntityType
@@ -15,7 +15,7 @@ import org.rdf4k.iri
 import org.rdf4k.sparqlSelectClasspath
 import org.rdf4k.str
 
-abstract class RelatedRiskResolver {
+abstract class IndirectRiskResolver {
 
     @Inject
     lateinit var rdfRepository: Repository

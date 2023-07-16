@@ -10,21 +10,28 @@ data class Address(
     val city: String? = null,
     val postCode: String? = null,
     val region: String? = null,
-    val country: String? = null,
+    val countryCode: String? = null,
     val careOf: String? = null
 ) {
 
-    val hash: String by lazy {
-        listOfNotNull(
-            poBox,
-            addressLine1,
-            addressLine2,
-            city,
-            postCode?.replace("\\s+".toRegex(), ""),
-            region,
-            country
-        )
-            .map { it.uppercase().cleanWhitespace() }
-            .joinToString { " " }
+    val full: String by lazy {
+        val full = listOfNotNull(
+            poBox?.cleanWhitespace(),
+            addressLine1?.cleanWhitespace(),
+            addressLine2?.cleanWhitespace(),
+            city?.cleanWhitespace(),
+            region?.cleanWhitespace(),
+            postCode?.cleanWhitespace(),
+        ).joinToString(" ")
+        cleanFullAddress(full, countryCode!!)
+    }
+
+    companion object {
+        fun cleanFullAddress(address: String, countryCode: String): String {
+            return ("$address $countryCode")
+                .replace(",", " ")
+                .cleanWhitespace()
+                .uppercase()
+        }
     }
 }

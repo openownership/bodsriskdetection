@@ -48,7 +48,7 @@ internal fun CSVRecord.toCompany(): Company {
             addressLine1 = this["RegAddress.AddressLine1"],
             addressLine2 = this["RegAddress.AddressLine2"],
             city = this["RegAddress.PostTown"],
-            country = this["RegAddress.Country"],
+            countryCode = this["RegAddress.Country"],
             region = this["RegAddress.County"],
             postCode = this["RegAddress.PostCode"]
         ),

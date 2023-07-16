@@ -10,4 +10,4 @@ done
 
 ELASTICSEARCH_PASSWORD=$(docker exec -it bods-risk-elasticsearch /usr/share/elasticsearch/bin/elasticsearch-reset-password -b -u elastic | grep "New value:" | sed -E 's/New value: //' | tr -d '\r')
 echo "Elasticsearch password is: $ELASTICSEARCH_PASSWORD"
-sed -i '' "s/ELASTICSEARCH_PASSWORD.*/ELASTICSEARCH_PASSWORD=$ELASTICSEARCH_PASSWORD/" ../../.env
+#sed -i '' "s/ELASTICSEARCH_PASSWORD.*/ELASTICSEARCH_PASSWORD=$ELASTICSEARCH_PASSWORD/" ../../.env

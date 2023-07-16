@@ -1,3 +1,14 @@
+app:
+  elasticsearch:
+    host: localhost
+    port: 9200
+    username: elastic
+    password: SOypmWfVtjnlM6_wq7XT
+  rdf:
+    connection-url: http://localhost:7200
+    username: admin
+    password: admin
+
 micronaut:
   views:
     pebble:

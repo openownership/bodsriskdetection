@@ -6,3 +6,18 @@
 bodsrisk:awardedPublicContract
     a          rdf:Property ;
     rdfs:range rdfs:Literal .
+
+
+bodsrisk:Address
+    a rdfs:Class .
+
+
+bodsrisk:registeredAddress
+    a          rdf:Property ;
+    rdfs:range bodsrisk:Address .
+
+
+bodsrisk:fullAddress
+    a           rdf:Property ;
+    rdfs:domain bodsrisk:Address ;
+    rdfs:range  rdfs:Literal .

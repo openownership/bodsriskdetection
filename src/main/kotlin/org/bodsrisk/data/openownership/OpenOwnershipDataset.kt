@@ -2,6 +2,7 @@ package org.bodsrisk.data.openownership
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient
 import co.elastic.clients.elasticsearch.indices.ElasticsearchIndicesClient
+import com.beust.klaxon.JsonObject
 import jakarta.inject.Singleton
 import org.bodsrisk.data.importer.DataImporter
 import org.bodsrisk.data.importer.FileSource
@@ -11,7 +12,9 @@ import org.bodsrisk.data.pscRefSlug
 import org.bodsrisk.elasticsearch.DocumentBatch
 import org.bodsrisk.elasticsearch.delete
 import org.bodsrisk.elasticsearch.indexExists
+import org.bodsrisk.model.Address
 import org.bodsrisk.rdf.sameAs
+import org.bodsrisk.rdf.vocabulary.BodsRisk
 import org.bodsrisk.rdf.vocabulary.FTM
 import org.eclipse.rdf4j.model.Statement
 import org.kbods.rdf.BodsRdfConfig
@@ -80,18 +83,22 @@ class OpenOwnershipDataset(
 
     private fun riskDetectionData(statement: BodsStatement): List<Statement> {
         val statements = mutableListOf<Statement>()
+        val iri = statement.iri()
 
         // Converting GB COH PSC references like
         // /company/OC306781/persons-with-significant-control/individual/nUVcsN0q0EAzOlyeyP4ZEHEH14g
         // to
         // gb-coh-psc-oc306781-nuvcsn0q0eazolyeyp4zeheh14g
-        // which can then link to OpenSanctions records using that in "referents"
+        // which can then link to OpenSanctions records using "referents"
         statement.pscRefs()
             .filter { it.isNotBlank() }
             .mapNotNull { it.pscRefSlug() }
             .forEach { pscRef ->
-                statements.add(statement.iri().sameAs(FTM.iri(pscRef)))
+                statements.add(iri.sameAs(FTM.iri(pscRef)))
             }
+
+        // Add registered addresses if present
+        statements.addAll(registeredAddressStatements(statement))
 
         return statements
     }
@@ -101,5 +108,20 @@ class OpenOwnershipDataset(
         private const val DOWNLOAD_URL =
             "https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz"
         private val log = LoggerFactory.getLogger(OpenOwnershipDataset::class.java)
+
+        internal fun registeredAddressStatements(statement: BodsStatement): MutableList<Statement> {
+            val statements = mutableListOf<Statement>()
+            statement.json.array<JsonObject>("addresses")
+                ?.filter { it.string("type") == "registered" }
+                ?.forEach { address ->
+                    val full = address.string("address")!!
+                    val country = address.string("country")
+                    if (country != null) {
+                        val fullAddress = Address.cleanFullAddress(full, country)
+                        statements.addAll(BodsRisk.registeredAddress(statement.iri(), fullAddress))
+                    }
+                }
+            return statements
+        }
     }
 }
