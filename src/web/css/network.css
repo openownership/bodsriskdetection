@@ -82,7 +82,7 @@
     @apply font-semibold;
 }
 
-.network .node .label.registered_address .text {
+.network .node.registered_address .label .text {
     @apply text-sm;
 }
 

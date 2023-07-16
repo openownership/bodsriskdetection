@@ -211,7 +211,7 @@ function addNodeIcon(g, networkSettings, getNodeData) {
         });
 }
 
-function labelHtml(nodeData, networkSettings, extraNode, cssClass = "") {
+function labelHtml(nodeData, networkSettings, extraNode) {
     let tags = ""
     if (nodeData.tags !== undefined) {
         nodeData.tags.forEach(function (tag) {
@@ -219,7 +219,7 @@ function labelHtml(nodeData, networkSettings, extraNode, cssClass = "") {
         });
     }
 
-    return `<div class="label ${cssClass} ${extraNode && extraNode.relatedTo === nodeData.id ? 'left-of-circle' : ''}">
+    return `<div class="label ${extraNode && extraNode.relatedTo === nodeData.id ? 'left-of-circle' : ''}">
                 <div class="text"><a href="${networkSettings.nodeUrl(nodeData)}" target="_blank">${nodeData.name}</a></div>
                 <div class="tags">${tags}</div>
            </div>`;
@@ -244,12 +244,12 @@ function addNodeLabel(root, node, networkSettings, extraNode) {
         .attr("height", networkSettings.nodeRadius * 2 + networkSettings.textMargin * 2)
         .html(function (d) {
             let nodeData = d.data;
-            return labelHtml(nodeData, networkSettings, extraNode, d.data.type.toLowerCase());
+            return labelHtml(nodeData, networkSettings, extraNode);
         });
 }
 
 function nodeClass(nodeData, isRoot) {
-    let cssClass = "node";
+    let cssClass = `node ${nodeData.type.toLowerCase()}`;
     if (nodeData.highlighted) {
         cssClass += " highlighted";
     }
