@@ -1,0 +1,15 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+PREFIX ftm: <https://w3id.org/ftm#>
+
+SELECT ?target (GROUP_CONCAT(DISTINCT ?topic;separator=",") as ?uboRelativeRisks)
+WHERE {
+    ?rel ftm:Family:person ?riskEntity .
+    ?rel ftm:Family:relative ?ubo .
+
+    ?ubo bods:ownsOrControls+ ?target .
+
+    ?riskEntity ftm:Thing:topics ?topic .
+    FILTER(STRSTARTS(STR(?ubo), STR(bodsr:)))
+}
+GROUP BY ?target

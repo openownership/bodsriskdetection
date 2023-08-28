@@ -1,0 +1,7 @@
+{% extends "layout-base" %}
+
+{% block pageContent %}
+    <div class="flex flex-col m-4">
+        <h1>Open Ownership</h1>
+    </div>
+{% endblock %}

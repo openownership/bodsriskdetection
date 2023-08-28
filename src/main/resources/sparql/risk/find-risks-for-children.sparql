@@ -1,0 +1,9 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsrisk: <http://bods.openownership.org/risk/>
+
+SELECT ?riskEntity ?relationship (GROUP_CONCAT(DISTINCT ?risk;separator=",") as ?risks)
+WHERE {
+    ?target bods:ownsOrControls+ ?riskEntity .
+    ?riskEntity bodsrisk:hasRisk ?risk .
+}
+GROUP BY ?riskEntity ?relationship

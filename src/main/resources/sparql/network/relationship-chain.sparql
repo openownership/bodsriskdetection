@@ -1,0 +1,13 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+
+SELECT ?parent ?controlStatement ?child
+WHERE {
+    ?source bods:ownsOrControls* ?parent .
+    ?controlStatement bods:hasInterestedParty ?parent .
+    ?controlStatement bods:hasSubject ?child .
+    ?child bods:ownsOrControls* ?destination .
+    FILTER(STRSTARTS(STR(?parent), STR(bodsr:)))
+    FILTER(STRSTARTS(STR(?child), STR(bodsr:)))
+}
+GROUP BY ?parent ?controlStatement ?child

@@ -1,0 +1,10 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsrisk: <http://bods.openownership.org/risk/>
+PREFIX ftm: <https://w3id.org/ftm#>
+
+SELECT ?fullAddress
+WHERE {
+    ?entity1 bodsrisk:registeredAddress/bodsrisk:fullAddress ?fullAddress .
+    ?entity2 bodsrisk:registeredAddress/bodsrisk:fullAddress ?fullAddress .
+}
+LIMIT 1

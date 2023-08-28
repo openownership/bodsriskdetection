@@ -1,0 +1,12 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+PREFIX onto: <http://www.ontotext.com/>
+PREFIX ftm: <https://w3id.org/ftm#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT ?openSanctionsRecord
+WHERE {
+    ?target owl:sameAs ?openSanctionsRecord .
+    FILTER(STRSTARTS(STR(?openSanctionsRecord), STR(ftm:)))
+}
+LIMIT 1

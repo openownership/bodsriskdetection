@@ -1,0 +1,15 @@
+.tabs {
+    @apply flex flex-col items-start text-sm;
+}
+
+.tabs {
+    @apply flex flex-row gap-1 font-medium w-full;
+}
+
+.tabs a {
+    @apply px-3 py-2 no-underline text-copy hover:text-control;
+}
+
+.tabs a.selected {
+    @apply border-b-2 border-control text-control;
+}

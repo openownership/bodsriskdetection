@@ -1,0 +1,22 @@
+.modal {
+    @apply flex flex-col items-center overflow-scroll max-h-screen;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-dialog {
+    @apply mt-24 mx-auto flex flex-col shadow-md bg-white rounded-xl mb-24 w-[800px];
+}
+
+.modal-title {
+    @apply text-xl font-semibold pl-6 pr-4 py-4 rounded-tl-xl rounded-tr-xl;
+}
+
+.modal-content {
+    @apply rounded-bl-xl rounded-br-xl px-6 pb-6;
+}

@@ -1,0 +1,14 @@
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bodsrisk: <http://bods.openownership.org/risk/>
+
+SELECT DISTINCT ?target (GROUP_CONCAT(DISTINCT ?risk;separator=",") as ?parentRisks)
+WHERE {
+    ?riskEntity bods:ownsOrControls+ ?target .
+    ?riskEntity bodsrisk:hasRisk ?risk .
+    ?riskEntity rdf:type ?riskEntityType .
+
+    FILTER(STRSTARTS(STR(?target), STR(bodsr:)))
+}
+GROUP BY ?target

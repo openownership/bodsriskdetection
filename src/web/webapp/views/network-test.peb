@@ -1,0 +1,202 @@
+{% extends "layout-base" %}
+{% import "macros/utils.peb" %}
+
+{% block pageContent %}
+    <div class="network h-screen w-full">
+
+    </div>
+
+    <script>
+        let data = {
+            "rootId": "aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci00NjQ0NDg1ODAzNzgxMjUzOTg0",
+            "nodes": [{
+                "id": "aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci0zNzk5MDM1MTgzNDg2OTIwMDU3",
+                "name": "NORD GOLD PLC",
+                "type": "LEGAL_ENTITY",
+                "tags": [{
+                    "label": "1 Risk",
+                    "type": "RISKS",
+                    "color": "RED"
+                }],
+                "highlighted": false
+            }, {
+                "id": "aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci05MDYzNDkwMjEwNjg4NzU2NTA0",
+                "name": "Alexey Mordashov",
+                "type": "PERSON",
+                "tags": [{
+                    "label": "2 Risks",
+                    "type": "RISKS",
+                    "color": "RED"
+                }],
+                "highlighted": false
+            }, {
+                "id": "aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci00NjQ0NDg1ODAzNzgxMjUzOTg0",
+                "name": "CELTIC RESOURCES (CENTRAL ASIA) LIMITED",
+                "type": "LEGAL_ENTITY",
+                "tags": [],
+                "highlighted": true
+            }, {
+                "id": "aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci0xMDk3MjM3NjQ4Mjk0ODA2NjcyNA",
+                "name": "NORD GOLD UK SOCIETAS",
+                "type": "LEGAL_ENTITY",
+                "tags": [{
+                    "label": "1 Risk",
+                    "type": "RISKS",
+                    "color": "RED"
+                }],
+                "highlighted": false
+            }, {
+                "id": "aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci0xNTU1MjA4NTI3MDUxNzU2OTAwNw",
+                "name": "Nord Gold Plc",
+                "type": "LEGAL_ENTITY",
+                "tags": [{
+                    "label": "1 Risk",
+                    "type": "RISKS",
+                    "color": "RED"
+                }],
+                "highlighted": false
+            }],
+            "relationships": [{
+                "parentId": "aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci05MDYzNDkwMjEwNjg4NzU2NTA0",
+                "childId": "aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci0zNzk5MDM1MTgzNDg2OTIwMDU3",
+                "details": ["Ownership of shares 25-50%"]
+            }, {
+                "parentId": "aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci0zNzk5MDM1MTgzNDg2OTIwMDU3",
+                "childId": "aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci00NjQ0NDg1ODAzNzgxMjUzOTg0",
+                "details": ["Ownership of shares 75-100%", "Voting rights 75-100%", "Right to appoint and remove directors"]
+            }],
+            "highlightedNodes": ["aHR0cDovL2JvZHMub3Blbm93bmVyc2hpcC5vcmcvcmVzb3VyY2Uvb3Blbm93bmVyc2hpcC1yZWdpc3Rlci00NjQ0NDg1ODAzNzgxMjUzOTg0", "aHR0cHM6Ly93M2lkLm9yZy9mdG0jTkstS3hnaUVEakNZa1RqdlRrRTlTZnNnaw"],
+            "extraNode": {
+                "node": {
+                    "id": "aHR0cHM6Ly93M2lkLm9yZy9mdG0jTkstS3hnaUVEakNZa1RqdlRrRTlTZnNnaw",
+                    "name": "Mr Kirill Mordashov",
+                    "type": "PERSON",
+                    "tags": [{
+                        "label": "1 Risk",
+                        "type": "RISKS",
+                        "color": "RED"
+                    }],
+                    "highlighted": true
+                },
+                "relationship": {
+                    "parentId": "https://w3id.org/ftm#NK-KxgiEDjCYkTjvTkE9Sfsgk",
+                    "childId": "http://bods.openownership.org/resource/openownership-register-9063490210688756504",
+                    "details": ["Family member of"]
+                },
+                "relatedTo": "http://bods.openownership.org/resource/openownership-register-9063490210688756504",
+                "relationshipDirection": "OUTGOING"
+            }
+        }
+
+        let data2 = {
+            "rootId": "top",
+            "extraRootConnection": {
+                "node": {"id": "rootLinkId", "name": "The brothers", "type": "LEGAL_ENTITY"},
+                "relationship": {
+                    "details": ["Aqutron"]
+                },
+                "relationshipDirection": "TO_ROOT"
+            },
+
+            "nodes": [
+                {"id": "top", "name": "top", "type": "LEGAL_ENTITY"},
+                {"id": "middle", "name": "BIFFA WASTE DISPOSAL AND SHITE LIMITED", "type": "LEGAL_ENTITY"},
+                {
+                    "id": "child1", "name": "child1", "type": "LEGAL_ENTITY", "tags": [
+                        {
+                            "label": "1 Risk",
+                            "type": "RISKS",
+                            "color": "RED"
+                        }
+                    ],
+                },
+                {"id": "child2", "name": "child2", "type": "LEGAL_ENTITY", "highlighted": true}
+            ],
+            "relationships": [
+                {"parentId": "middle", "childId": "child1", "details": ["aaa", "bbb"]},
+                {"parentId": "middle", "childId": "child2"},
+                {"parentId": "top", "childId": "middle"},
+            ]
+        };
+        let parentData = {
+            "rootId": "middle",
+            "extraRootConnection": {
+                "node": {"id": "rootLinkId", "name": "The brothers", "type": "LEGAL_ENTITY"},
+                "relationship": {
+                    "details": ["Aqutron"]
+                },
+                "relationshipDirection": "TO_ROOT"
+            },
+
+            "nodes": [
+                {"id": "middle", "name": "BIFFA WASTE ", "type": "LEGAL_ENTITY"},
+                {"id": "parent1", "name": "parent1", "type": "LEGAL_ENTITY"},
+                {
+                    "id": "parent2", "name": "parent2", "type": "LEGAL_ENTITY", "tags": [
+                        {
+                            "label": "1 Risk",
+                            "type": "RISKS",
+                            "color": "AMBER"
+                        }
+                    ]
+                },
+                {"id": "parent3", "name": "parent3", "type": "LEGAL_ENTITY"}
+            ],
+            "relationships": [
+                {"parentId": "parent1", "childId": "middle"},
+                {"parentId": "parent2", "childId": "middle"},
+                {"parentId": "parent3", "childId": "middle"}
+            ]
+        }
+
+        let parentData2 = {
+            "rootId": "http://bods.openownership.org/resource/openownership-register-13320726517544098931",
+            "nodes": [{
+                "id": "http://bods.openownership.org/resource/openownership-register-13320726517544098931",
+                "name": "KLARET LIMITED",
+                "type": "LEGAL_ENTITY",
+                "tags": [],
+                "highlighted": true
+            }, {
+                "id": "http://bods.openownership.org/resource/openownership-register-2746542985514644736",
+                "name": "Alisher Usmanov",
+                "type": "PERSON",
+                "tags": [],
+                "highlighted": false
+            }],
+            "relationships": [{
+                "parentId": "http://bods.openownership.org/resource/openownership-register-2746542985514644736",
+                "childId": "http://bods.openownership.org/resource/openownership-register-13320726517544098931",
+                "details": ["Ownership of shares 75-100%", "Voting rights 75-100%"]
+            }],
+            "highlightedNodes": ["http://bods.openownership.org/resource/openownership-register-13320726517544098931", "https://w3id.org/ftm#Q111548653"],
+            "extraNode": {
+                "node": {
+                    "id": "https://w3id.org/ftm#Q111548653",
+                    "name": "Gulbahor Ismailova",
+                    "type": "PERSON",
+                    "tags": [
+                        {
+                            "label": "1 Risk",
+                            "type": "RISKS",
+                            "color": "RED"
+                        }
+                    ],
+                    "highlighted": true
+                },
+                "relationship": {
+                    "parentId": "https://w3id.org/ftm#Q111548653",
+                    "childId": "http://bods.openownership.org/resource/openownership-register-2746542985514644736",
+                    "details": []
+                },
+                "relatedTo": "http://bods.openownership.org/resource/openownership-register-2746542985514644736",
+                "relationshipDirection": "OUTGOING"
+            }
+        }
+
+        $(document).ready(function ($) {
+            window.network.createTree(data, ".network", "no data", true);
+            // window.network.createTree(parentData2, ".network", "no data", true);
+        });
+    </script>
+{% endblock %}

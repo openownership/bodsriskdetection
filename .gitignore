@@ -1,0 +1,12 @@
+.gradle
+.idea
+build
+out
+node_modules
+etc
+Play*.kt
+.DS_Store
+data/db
+temp
+src/web/webapp/static/css/*
+src/web/webapp/static/js/*

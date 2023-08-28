@@ -1,0 +1,20 @@
+{
+    "index_patterns": [
+        "open-ownership*"
+    ],
+    "template": {
+        "mappings": {
+            "properties": {
+                "statementID": {
+                    "type": "keyword"
+                },
+                "statementType": {
+                    "type": "keyword"
+                },
+                "allNames": {
+                    "type": "text"
+                }
+            }
+        }
+    }
+}

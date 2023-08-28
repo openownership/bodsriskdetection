@@ -1,0 +1,14 @@
+{
+    "index_patterns": [
+        "icij*"
+    ],
+    "template": {
+        "mappings": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        }
+    }
+}

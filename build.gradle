@@ -1,0 +1,117 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "com.glovoapp.semantic-versioning" version "1.1.10"
+    id "io.micronaut.application" version "${micronautPluginsVersion}"
+//    id "io.micronaut.test-resources" version "${micronautPluginsVersion}"
+    id "org.jetbrains.kotlin.jvm" version "${kotlinVersion}"
+    id "org.jetbrains.kotlin.kapt" version "${kotlinVersion}"
+    id "org.jetbrains.kotlin.plugin.allopen" version "${kotlinVersion}"
+}
+
+group "org.bodsrisk"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url "https://maven.ontotext.com/repository/owlim-releases"
+    }
+}
+
+dependencies {
+    kapt 'io.micronaut:micronaut-inject-java'
+    kapt 'io.micronaut.serde:micronaut-serde-processor'
+
+    implementation "io.resoluteworks:slink-zero:${slinkVersion}"
+    implementation "io.resoluteworks:slink-http:${slinkVersion}"
+    implementation "io.resoluteworks:rdf4k:${rdfk4Version}"
+    implementation "io.resoluteworks:kbods-read:${kbodsVersion}"
+    implementation "io.resoluteworks:kbods-elasticsearch:${kbodsVersion}"
+    implementation "io.resoluteworks:kbods-rdf:${kbodsVersion}"
+
+    implementation "ch.qos.logback:logback-classic:1.4.5"
+    implementation "co.elastic.clients:elasticsearch-java:8.8.2"
+    implementation "com.beust:klaxon:5.6"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}"
+    implementation "com.michael-bull.kotlin-retry:kotlin-retry:1.0.9"
+    implementation "com.ontotext.graphdb:graphdb-runtime:10.2.1"
+    implementation "io.micronaut.data:micronaut-data-model:${micronautDataVersion}"
+    implementation "io.micronaut.data:micronaut-data-runtime:${micronautDataVersion}"
+    implementation "io.micronaut.kotlin:micronaut-kotlin-runtime"
+    implementation "io.micronaut.serde:micronaut-serde-api"
+    implementation "io.micronaut.serde:micronaut-serde-jackson"
+    implementation "io.micronaut.views:micronaut-views-core"
+    implementation "io.micronaut.views:micronaut-views-pebble"
+    implementation "io.micronaut:micronaut-aop"
+    implementation "io.micronaut:micronaut-core"
+    implementation "io.micronaut:micronaut-http"
+    implementation "io.micronaut:micronaut-http-server"
+    implementation "org.apache.commons:commons-compress:1.23.0"
+    implementation "org.apache.commons:commons-csv:1.9.0"
+    implementation "org.eclipse.rdf4j:rdf4j-rio-api:4.2.3"
+    implementation "org.eclipse.rdf4j:rdf4j-runtime:4.2.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "org.xerial:sqlite-jdbc:3.36.0.3"
+
+    testImplementation "io.kotest:kotest-assertions-core:${kotestVersion}"
+    testImplementation "io.kotest:kotest-property:${kotestVersion}"
+    testImplementation "io.kotest:kotest-runner-junit5-jvm:${kotestVersion}"
+    testImplementation "io.micronaut.test:micronaut-test-kotest5:3.9.2"
+    testImplementation "io.micronaut:micronaut-http-server-netty"
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit")
+    processing {
+        incremental(true)
+        annotations("org.bodsrisk.*")
+    }
+}
+
+application {
+    mainClass.set("org.bodsrisk.MicronautAppKt")
+}
+
+kotlin {
+    jvmToolchain(11)
+}
+
+allOpen {
+    annotation("io.micronaut.http.annotation.Controller")
+}
+
+sourceSets {
+    main.resources.srcDirs = ['src/web/webapp'] + main.resources.srcDirs
+}
+
+run {
+    classpath = files('src/web/webapp') + classpath
+    jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:5005',
+               '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+               '-Dmicronaut.environments=local',
+               '-Xms8g', '-Xmx8g'
+    ]
+}
+
+processResources {
+    filesMatching("**/application.yml") {
+        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: ["APP_VERSION": "${project.version}".toString()])
+    }
+}
+
+tasks.register('buildWebAssets') {
+    doLast {
+        exec { commandLine "npm", "install" }
+        exec { commandLine "npm", "run", "cleanBuild" }
+    }
+}
+
+processResources.dependsOn buildWebAssets
+
+

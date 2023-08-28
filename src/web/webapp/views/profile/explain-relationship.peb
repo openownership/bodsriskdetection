@@ -1,0 +1,2 @@
+<div class="network w-full h-[600px]"></div>
+<script>new network.createTree({{ treeJson | raw }}, ".network", "", {{ reverse }});</script>

@@ -1,0 +1,19 @@
+.risk-pill {
+    @apply flex flex-row items-center rounded-full px-3 py-0.5 text-white font-medium whitespace-nowrap text-sm;
+}
+
+.risk-pill.sm {
+    @apply text-xs px-2 py-0;
+}
+
+.risk-pill.red {
+    @apply bg-red-700;
+}
+
+.risk-pill.amber {
+    @apply bg-orange-400;
+}
+
+.risk-pill.green {
+    @apply bg-green-700;
+}

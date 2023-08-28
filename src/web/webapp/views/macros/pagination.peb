@@ -1,0 +1,37 @@
+{% macro paginationControl(
+    page,
+    prevText = "❮",
+    nextText = "❯",
+    ellipsisText = "⋯",
+    containerCss = ""
+    ) %}
+
+    {% set pagination = pagination(page) %}
+
+    {% if pagination.pageNumbers.size > 1 %}
+        <div class="pagination {{ containerCss }}">
+            {% if pagination.hasPrev %}
+                <a class="page" href="{{ request.addParam("page", pagination.prevPage) }}">{{ prevText }}</a>
+            {% else %}
+                <div class="page disabled">{{ prevText }}</div>
+            {% endif %}
+
+            {% for pageNumber in pagination.pageNumbers %}
+                {% if pageNumber != null %}
+                    <a href="{{ request.addParam("page", pageNumber) }}"
+                       class="page {{ pageNumber == pagination.currentPage ? 'selected' : '' }}">
+                        {{ pageNumber + 1 }}
+                    </a>
+                {% else %}
+                    <div class="page ellipsis">{{ ellipsisText }}</div>
+                {% endif %}
+            {% endfor %}
+
+            {% if pagination.hasNext %}
+                <a class="page" href="{{ request.addParam("page", pagination.nextPage) }}">{{ nextText }}</a>
+            {% else %}
+                <div class="page disabled">{{ nextText }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}

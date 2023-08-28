@@ -1,0 +1,28 @@
+{
+    "index_patterns": [
+        "open-sanctions*"
+    ],
+    "template": {
+        "mappings": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                },
+                "schema": {
+                    "type": "keyword"
+                },
+                "properties": {
+                    "type": "object",
+                    "properties": {
+                        "entity": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                "referents": {
+                    "type": "keyword"
+                }
+            }
+        }
+    }
+}
