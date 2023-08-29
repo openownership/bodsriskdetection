@@ -62,7 +62,7 @@ bodsr:openownership-register-15015183220188890661
 In this example, we're stating that our BODS record `openownership-register-15015183220188890661`
 represents the UK company with registration number `03450311`.
 
-This will then enable us to query the ownership chains while filterning for companies which have been awarded public contracts in the UK.
+This will then enable us to query the ownership chains while filtering for companies which have been awarded public contracts in the UK.
 An example SPARQL query for this logic is available [here](https://github.com/openownership/bodsriskdetection/blob/main/src/main/resources/sparql/public-contracts/contracts-for-related-entities.sparql).
 
 ## A note on Contract Finder data
