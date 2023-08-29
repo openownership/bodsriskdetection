@@ -12,7 +12,7 @@ was initially designed to solve, as well as their relevance in risk, compliance 
 * [Public Contracts](docs/use-cases/public-contracts.md)
 * [Risk - PEP & Sanctions](docs/use-cases/risk-pep-sanctions.md)
 * [Risk - Registered Address](docs/use-cases/risk-registered-address.md)
-* [Ownership & Control](./ownership-and-control.md)
+* [Ownership & Control](docs/use-cases/ownership-and-control.md) 
 
 ## Demos
 
@@ -86,8 +86,8 @@ To start the application, run
 ```
 
 ### Datasets in this PoC
-* [Open Ownership register](https://register.openownership.org/download)
-* [Open Sanctions](https://www.opensanctions.org/datasets/) default dataset
+* [Open Ownership Register](https://register.openownership.org/download)
+* [OpenSanctions](https://www.opensanctions.org/datasets/) default dataset
 * [UK Public Contracts data](https://www.contractsfinder.service.gov.uk)
 
 ### Importing data in an empty database
