@@ -33,7 +33,7 @@ to refer to a UK company. More details on this data linking approach is discusse
     bodsrisk:awardedPublicContract bodsrisk-entity:10f99886-d048-40df-bf13-5db402330aef-188101.
 ```
 
-Linking a company in the Open Ownership register then becomes a matter of creating an `owl:sameAs` between the BODS
+Linking a company in the Open Ownership Register then becomes a matter of creating an `owl:sameAs` between the BODS
 record and the relevant Companies House URI. In order to produce this, we only need the company's registration number
 which is available in the BODS record for a UK company.
 
