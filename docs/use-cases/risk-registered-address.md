@@ -8,7 +8,7 @@ of entities.
 
 There are two areas which we focused on in this PoC in relation to registered addresses:
 * Identifying sanctioned entities which share an address with a target (for which no direct risks are identified). This is using
-  the [Open Sanctions](https://www.opensanctions.org/) dataset.
+  the [OpenSanctions](https://www.opensanctions.org/) dataset.
 * Identifying entities listed in the [ICIJ Offshore Leaks database](https://offshoreleaks.icij.org/), which share an address with a target.
 
 It's worth noting that exceptions (false positives) exist when we consider [company formation agents](https://www.gov.uk/government/publications/formation-and-company-secretarial-agents/company-formation-agents-and-secretarial-agents)
