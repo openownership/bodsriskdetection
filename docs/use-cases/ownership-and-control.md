@@ -6,14 +6,12 @@ BODS model can be leveraged through RDF to enable several use cases specific to 
 
 We discuss here some of the opportunities enabled by an RDF (graph) representation of the BODS data, and the
 way they've been implemented in this PoC. These don't require record linking logic with 3rd party datasets
-and can be materialised using exclusively the Open Ownership register.
+and can be materialised using exclusively the Open Ownership Register.
 
 ## UBOs
-Generally, a UBO refers to an individual holding a certain interest (capital or voting rights) in a specific (target) entity.
-The specifics vary depending on the jurisdiction, and sometime on the solution requirements, but it's usually considered that
-for an individual to qualify as UBO, they must hold between 10% and 25% of the capital or voting shares. 
+Generally, a ultimate beneficial owner (UBO) refers to an individual holding a certain interest (capital or voting rights) in a specific (target) entity. The specifics vary depending on the jurisdiction - and sometimes on the solution requirements - but it's usually considered that for an individual to qualify as a UBO, they must hold between 10% and 25% of the capital or voting shares. 
 
-For the purposes of our PoC we have relaxed the definition to include any individuals holding any level of interest within
+For the purposes of our PoC we have relaxed the definition to include any individual's holding any level of interest within
 an entity. This is suitable for most cases, but in a real-world application there might a filtering logic based on the level
 of equity will need to be considered. We deliberately left this out of the scope of this PoC.
 
