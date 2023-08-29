@@ -59,7 +59,7 @@ cases we're addressing. We don't claim for any of this to be suitable for a prod
 
 ### Starting the databases
 This PoC uses [Graph DB](https://www.ontotext.com/products/graphdb/) and [Elasticsearch 8](https://www.elastic.co/elasticsearch/)
-to import and process the [Open Ownership register](https://register.openownership.org/download) as RDF statements and JSON documents, respectively.
+to import and process the [Open Ownership Register](https://register.openownership.org/download) as RDF statements and JSON documents, respectively.
 
 These have been wired using the official Docker image for each of these databases. We have then ran a full data import and
 produced two docker images with the complete dataset required for this PoC.
