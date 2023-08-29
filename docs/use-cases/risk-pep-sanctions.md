@@ -3,7 +3,7 @@
 <img src="diagrams/use-case-peps-ubo.png" width="400"/>
 
 A common use case in risk management is identifying whether a target is the subject to any sanctions, or if they are in
-any way politically exposed (PEP).
+any way a politically exposed person (PEP).
 
 By leveraging the inherent graph nature of the BODS ownership model, we are able to push this one step further and identify
 what we called indirect risks: third parties connected to a target which are themselves politically exposed or sanctioned entities.
