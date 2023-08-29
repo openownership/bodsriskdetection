@@ -8,7 +8,7 @@ any way a politically exposed person (PEP).
 By leveraging the inherent graph nature of the BODS ownership model, we are able to push this one step further and identify
 what we called indirect risks: third parties connected to a target which are themselves politically exposed or sanctioned entities.
 
-The process of attaching PEP/Sanctions data to BODS records relies on the [Open Sanctions](https://www.opensanctions.org/)
+The process of attaching PEP/Sanctions data to BODS records relies on the [OpenSanctions](https://www.opensanctions.org/)
 dataset, which is commonly used in a variety of Risk & Compliance use cases.
 
 [PEP/Sanctions Demo](https://drive.google.com/file/d/1LRqfMuaQriMdqGA8T8jY3Ga6-iwDnHYw/view?usp=drive_link)
@@ -20,7 +20,7 @@ on the use case and data model constraints.
 
 In order to contain the complexity of this PoC, we have deliberately avoided any approaches that go beyond what can be
 inferred automatically from the dataset. In other words, we haven't explored probabilistic matching algorithms relying on
-less-structured and less-reliable data points (name variations, DOBs, addresses, etc). 
+less-structured and less-reliable data points (name variations, dates of birth, addresses, etc). 
 
 This has reduced the number of records we were able to link, but it has in turn provided stronger guarantees
 for the ones we did, which seemed a reasonable compromise for a proof of concept.
@@ -28,7 +28,7 @@ for the ones we did, which seemed a reasonable compromise for a proof of concept
 The approach was then based on establishing the data points that act as identifiers or known references for an entity.
 
 The first data point that we chose is a UK company's registration number, which is available both datasets.
-This allows us to reliably "sameAs" an Open Sanctions record with one from the Open Ownership register.
+This allows us to reliably "sameAs" an OpenSanctions record with one from the Open Ownership Register.
 
 Open Sanction also publishes PSC (persons of significant control) information for certain entities as additional 
 references within a record. These can be matched against Companies House identifiers, which in turn can match the entity against a BODS record.
@@ -50,7 +50,7 @@ references within a record. These can be matched against Companies House identif
 }
 ```
 
-Above is an Open Ownership record with its PSC reference. Below is the Open Sanctions entity record which includes in the
+Above is an Open Ownership record with its PSC reference. Below is the OpenSanctions entity record which includes in the
 `referents` array an ID ("slug") `gb-coh-psc-06805907-j-j1jg59zoo-i7kopyunywdtiaw` which is the equivalent of the PSC URI
 `/company/06805907/persons-with-significant-control/individual/J-J1jG59ZOo_I7kOpyUNywDTiAw`.
 
@@ -76,7 +76,7 @@ bodsr:openownership-register-2746542985514644736
   owl:sameAs  <https://w3id.org/ftm#gb-coh-psc-06805907-j-j1jg59zoo-i7kopyunywdtiaw> .
 ```
 
-When importing the Open Sanctions dataset, we in turn explicitly create a triple between the PSC slug and the sanctioned
+When importing the OpenSanctions dataset, we in turn explicitly create a triple between the PSC slug and the sanctioned
 record
 ```turtle
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
