@@ -77,5 +77,5 @@ This makes record linking a very complex problem which. In a real-world applicat
 one would have to devise algorithms based on company names and addresses, which themselves aren't always consistent.
 
 It's important to note that this PoC is relying exclusively on the small subset of Contracts Finder records where
-a Companies House number has provided. This was sufficient to demonstrate the record linking capability for this use case,
+a Companies House number has been provided. This was sufficient to demonstrate the record linking capability for this use case,
 but it's not practical for wider applications.
