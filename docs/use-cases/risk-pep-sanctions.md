@@ -30,7 +30,7 @@ The approach was then based on establishing the data points that act as identifi
 The first data point that we chose is a UK company's registration number, which is available both datasets.
 This allows us to reliably "sameAs" an OpenSanctions record with one from the Open Ownership Register.
 
-Open Sanction also publishes PSC (persons of significant control) information for certain entities as additional 
+OpenSanctions also publishes PSC (persons of significant control) information for certain entities as additional 
 references within a record. These can be matched against Companies House identifiers, which in turn can match the entity against a BODS record.
 
 ![](diagrams/record-linking-opensanctions.png)
