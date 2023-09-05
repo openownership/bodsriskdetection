@@ -65,8 +65,9 @@ fun ElasticsearchIndicesClient.createIndex(name: String): ElasticsearchIndicesCl
     return this
 }
 
-fun ElasticsearchIndicesClient.wipeIndex(index: String) {
+fun ElasticsearchIndicesClient.forceCreateIndex(index: String) {
     deleteIndex(index)
     deleteIndexTemplate(index)
     newIndexTemplate(index, "elasticsearch/templates/$index.json")
+    createIndex(index)
 }

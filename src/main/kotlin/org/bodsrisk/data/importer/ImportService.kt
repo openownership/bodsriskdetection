@@ -1,24 +1,21 @@
 package org.bodsrisk.data.importer
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient
-import co.elastic.clients.elasticsearch.indices.ElasticsearchIndicesClient
 import io.micronaut.runtime.event.ApplicationStartupEvent
 import io.micronaut.runtime.event.annotation.EventListener
 import io.slink.datetime.humanReadableString
+import io.slink.files.TempDir
+import io.slink.files.withTempDir
 import jakarta.inject.Singleton
 import org.bodsrisk.utils.ThreadPool
-import org.eclipse.rdf4j.repository.Repository
 import org.slf4j.LoggerFactory
-import kotlin.time.ExperimentalTime
+import java.io.File
 import kotlin.time.measureTime
 
+/**
+ * Service responsible for running the data importers
+ */
 @Singleton
-class ImportService(
-    private val config: DataImportConfig,
-    private val rdfRepository: Repository,
-    private val esClient: ElasticsearchClient,
-    private val esIndices: ElasticsearchIndicesClient,
-) {
+class ImportService(private val config: DataImportConfig) {
 
     @EventListener
     fun importData(event: ApplicationStartupEvent) {
@@ -27,40 +24,54 @@ class ImportService(
             return
         }
 
-        val ranImporters = config.importers.filter { !it.requiresImport }.map { it::class }
-        ThreadPool<Unit>(THREAD_POOL_SIZE).use { threadPool ->
-            config.importers
-                .filter { it::class !in ranImporters }
-                .forEach { importer ->
-                    log.info("Queueing importer ${importer::class.simpleName}")
-                    threadPool.submit {
-                        runImporter(importer)
-                    }
-                }
+        // We run importers sequentially, but this can be easily extended to
+        // implement the running of these importers concurrently.
+        // The main constraint here is the GraphDB license and the fact that ingestion is single-threaded
+        // with the Free license. This makes concurrent writes essentially serialized, which means there's
+        // no benefit in running multiple importers in parallel, since most of them require an RDF database write.
+
+        withTempDir(File("temp")) { tempDir ->
+            config.importers.forEach { importer ->
+                runImporter(tempDir, importer)
+            }
         }
     }
 
-    @OptIn(ExperimentalTime::class)
-    internal fun runImporter(importer: DataImporter) {
-        val name = importer::class.simpleName
-        log.info("Running data importer $name")
-        val importTask = ImportTask(rdfRepository, esClient, esIndices)
-        try {
-            importer.buildTask(importTask)
-            val duration = measureTime { importTask.run() }
+    internal fun runImporter(tempDir: TempDir, importer: DataImporter) {
+        val name = importer::class.simpleName!!
+        val task = importer.createImportTask()
+        if (task.runnable()) {
+            log.info("Running data importer $name")
+            task.runBeforeStart()
+            val duration = measureTime {
+                runTaskJobs(tempDir, name, task)
+            }
             log.info("Importer $name finished in ${duration.humanReadableString()}")
-        } catch (e: Exception) {
-            log.error("Error running importer $name", e)
-            throw e
+        } else {
+            log.info("Importer $name doesn't need to run")
+        }
+    }
+
+    private fun runTaskJobs(tempDir: TempDir, importerName: String, task: FileImportTask) {
+        ThreadPool<Unit>(JOB_POOL_SIZE).use { threadPool ->
+            task.source.forEachFile(tempDir) { file ->
+                task.getConsumers().forEach { consumer ->
+                    threadPool.submit {
+                        try {
+                            consumer(file)
+                        } catch (e: Exception) {
+                            log.error("Error running importer $importerName with file $file", e)
+                            throw e
+                        }
+                    }
+                }
+            }
         }
     }
 
     companion object {
-        // The main constraint here is the GraphDB license and the fact that ingestion is single-threaded
-        // with the Free license. This makes concurrent writes essentially serialized, which means there's not much
-        // value in having more than 1 thread
-        private const val THREAD_POOL_SIZE = 1
-
+        // Again, due to GraphDB limitations, there isn't value in running more than 2 threads (one for ES one for GraphDB)
+        private const val JOB_POOL_SIZE = 2
         private val log = LoggerFactory.getLogger(ImportService::class.java)
     }
 }

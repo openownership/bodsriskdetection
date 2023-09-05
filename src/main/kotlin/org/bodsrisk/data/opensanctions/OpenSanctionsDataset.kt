@@ -1,37 +1,27 @@
 package org.bodsrisk.data.opensanctions
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient
-import co.elastic.clients.elasticsearch.indices.ElasticsearchIndicesClient
 import co.elastic.clients.json.JsonData
 import jakarta.inject.Singleton
 import org.bodsrisk.data.importer.DataImporter
+import org.bodsrisk.data.importer.FileImportTask
 import org.bodsrisk.data.importer.FileSource
-import org.bodsrisk.data.importer.ImportTask
-import org.bodsrisk.elasticsearch.indexExists
+import org.bodsrisk.elasticsearch.ElasticsearchDocument
 import org.bodsrisk.elasticsearch.terms
 import org.bodsrisk.utils.toKlaxonJson
 
 @Singleton
 class OpenSanctionsDataset(
     private val esClient: ElasticsearchClient,
-    private val esIndices: ElasticsearchIndicesClient,
-) : DataImporter {
+) : DataImporter() {
 
-    override val requiresImport: Boolean = !esIndices.indexExists(INDEX)
-
-    override fun buildTask(task: ImportTask) {
-        val source = FileSource.Remote(DOWNLOAD_URL)
-        task.source(source)
-            .importRdf { jsonlFile, rdfBatch ->
-                jsonlFile.forEachLine { jsonString ->
-                    rdfBatch.add(jsonString.toKlaxonJson().toRdf())
-                }
-            }
-            .index(INDEX) { jsonlFile, docBatch ->
-                jsonlFile.forEachLine { jsonString ->
-                    docBatch.add(jsonString)
-                }
-            }
+    override fun createImportTask(): FileImportTask {
+        return importTask {
+            source(FileSource.Remote(DOWNLOAD_URL))
+            withIndex(INDEX)
+            importRdf { it.toKlaxonJson().toRdf() }
+            index(INDEX) { ElasticsearchDocument(it) }
+        }
     }
 
     fun getRecord(idOrRef: String): JsonData? {

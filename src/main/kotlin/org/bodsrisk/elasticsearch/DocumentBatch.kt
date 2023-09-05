@@ -12,6 +12,10 @@ class DocumentBatch<T>(
 
     fun add(document: T, id: String? = null) {
         val doc = ElasticsearchDocument(document, id)
+        addDocument(doc)
+    }
+
+    fun addDocument(doc: ElasticsearchDocument<T>) {
         documents.add(doc)
         if (documents.size == size) {
             bulkIndex()

@@ -9,6 +9,9 @@ import org.eclipse.rdf4j.model.IRI
 import org.eclipse.rdf4j.model.Statement
 import org.rdf4k.add
 import org.rdf4k.literal
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger("org.bodsrisk.data.opensanctions")
 
 val JsonObject.entityType: EntityType
     get() {
@@ -50,28 +53,34 @@ private val rdfHandlers = mapOf(
 private val SCHEMAS_FOR_REFERENTS = setOf("Company", "Person")
 
 fun JsonObject.toRdf(): List<Statement> {
-    val statements = mutableListOf<Statement>()
+    try {
+        val statements = mutableListOf<Statement>()
 
-    // Type-specific RDF statements
-    statements.addAll(rdfHandlers[schema]?.invoke(this) ?: emptyList())
+        // Type-specific RDF statements
+        statements.addAll(rdfHandlers[schema]?.invoke(this) ?: emptyList())
 
-    // Add referents (linked IDs)
-    if (schema in SCHEMAS_FOR_REFERENTS) {
-        referents.forEach { referent ->
-            val referentIri = FTM.iri(referent)
-            statements.add(openSanctionsIri.sameAs(referentIri))
+        // Add referents (linked IDs)
+        if (schema in SCHEMAS_FOR_REFERENTS) {
+            referents.forEach { referent ->
+                val referentIri = FTM.iri(referent)
+                statements.add(openSanctionsIri.sameAs(referentIri))
+            }
         }
-    }
 
-    // Add risks
-    topics.forEach { topic ->
-        statements.add(openSanctionsIri, BodsRisk.PROP_HAS_RISK, topic.literal())
-    }
+        // Add risks
+        topics.forEach { topic ->
+            statements.add(openSanctionsIri, BodsRisk.PROP_HAS_RISK, topic.literal())
+        }
 
-    // Add registered address if present
-    addressEntity.forEach { addressId ->
-        statements.add(openSanctionsIri, BodsRisk.PROP_REG_ADDRESS, FTM.iri(addressId))
-    }
+        // Add registered address if present
+        addressEntity.forEach { addressId ->
+            statements.add(openSanctionsIri, BodsRisk.PROP_REG_ADDRESS, FTM.iri(addressId))
+        }
 
-    return statements
+        return statements
+    } catch (e: Exception) {
+        log.error("Error processing record ${this.toJsonString()}", e)
+        return emptyList()
+    }
 }
+

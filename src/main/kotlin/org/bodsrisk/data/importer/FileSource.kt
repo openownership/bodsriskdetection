@@ -1,7 +1,6 @@
 package org.bodsrisk.data.importer
 
 import io.slink.files.TempDir
-import io.slink.files.withTempDir
 import io.slink.http.get
 import io.slink.http.newHttpClient
 import io.slink.http.writeTo
@@ -11,6 +10,13 @@ import org.bodsrisk.utils.unzip
 import org.slf4j.LoggerFactory
 import java.io.File
 
+/**
+ * A generic source of data for an importer. This class encapsulates both the retrieval of the content
+ * for a data source, as well as the unpacking of it, if necessary.
+ *
+ * The objective is to separate the data loading from the processing, giving the client code the ability
+ * to focus on handling the contents of the source (file or files) rather than storage and retrieval semantics.
+ */
 sealed class FileSource {
 
     private var unpack: Unpack? = null
@@ -22,15 +28,13 @@ sealed class FileSource {
         return this
     }
 
-    fun forEachFile(block: (File) -> Unit) {
-        withTempDir(File("temp")) { tempDir ->
-            loadFiles(tempDir).forEach { file ->
-                block(file)
-            }
+    fun forEachFile(tempDir: TempDir, block: (File) -> Unit) {
+        loadFiles(tempDir).forEach { file ->
+            block(file)
         }
     }
 
-    fun loadFiles(tempDir: TempDir): List<File> {
+    protected open fun loadFiles(tempDir: TempDir): List<File> {
         log.info("Processing file source $this")
         val sourceFile = fetch(tempDir)
         val files = mutableListOf<File>()
@@ -84,6 +88,26 @@ sealed class FileSource {
 
         override fun toString(): String {
             return "Local(path='$path')"
+        }
+    }
+
+    /**
+     * For test purposes only
+     */
+    class Static(vararg val files: Pair<String, String>) : FileSource() {
+        override fun fetch(tempDir: TempDir): File {
+            return tempDir.newFile()
+        }
+
+        override fun loadFiles(tempDir: TempDir): List<File> {
+            val allFiles = mutableListOf<File>()
+            files.forEach {
+                val dir = tempDir.newDirectory()
+                val file = File(dir, it.first)
+                file.writeText(it.second)
+                allFiles.add(file)
+            }
+            return allFiles
         }
     }
 

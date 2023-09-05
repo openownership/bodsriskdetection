@@ -83,7 +83,7 @@ fun ElasticsearchClient.index(index: String, documents: List<String>) {
             }
         }
         bulkRequest
-    }
+    }.checkErrors()
 }
 
 fun ElasticsearchClient.indexDocs(index: String, documents: List<ElasticsearchDocument<*>>) {
@@ -95,7 +95,7 @@ fun ElasticsearchClient.indexDocs(index: String, documents: List<ElasticsearchDo
             }
         }
         bulkRequest
-    }
+    }.checkErrors()
 }
 
 private fun batchDocIndex(

@@ -3,11 +3,13 @@ app:
     host: localhost
     port: 9200
     username: elastic
-    password: KX8qeTZmjk4QiG36_KYx
+    password: QBrEoenGBdcaY1LROzIR
   rdf:
     connection-url: http://localhost:7200
     username: admin
     password: admin
+  data-import:
+    importer-names: IcijDataset
 
 micronaut:
   views:

@@ -16,7 +16,7 @@ class SameRegisteredAddressExplainer : RelationshipExplainer(RelatedEntityRelati
             root = graph.nodes.find { it.entity.type == EntityType.REGISTERED_ADDRESS }!!.entity.iri,
             graph = graph,
             graphType = GraphType.ReverseTree,
-            relevantNodes = setOf(target,relatedEntity)
+            relevantNodes = setOf(target, relatedEntity)
         )
     }
 }

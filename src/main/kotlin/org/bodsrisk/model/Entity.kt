@@ -15,7 +15,7 @@ import org.eclipse.rdf4j.model.IRI
  * which we didn't bother with, due to the large number of fields in certain sources where a complete date isn't available.
  * We chose to simply transfer the underlying String value to avoid this.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "entity_type")
 @JsonSubTypes(
     JsonSubTypes.Type(value = LegalEntity::class, name = "LEGAL_ENTITY"),
     JsonSubTypes.Type(value = Person::class, name = "PERSON"),
@@ -23,8 +23,6 @@ import org.eclipse.rdf4j.model.IRI
     JsonSubTypes.Type(value = RegisteredAddress::class, name = "REGISTERED_ADDRESS")
 )
 abstract class Entity(
-    @JsonSerialize(using = IriSerializer::class)
-    @JsonDeserialize(using = IriDeserializer::class)
     val iri: IRI,
     val name: String,
     val type: EntityType,
@@ -36,6 +34,8 @@ abstract class Entity(
 }
 
 class LegalEntity(
+    @JsonSerialize(using = IriSerializer::class)
+    @JsonDeserialize(using = IriDeserializer::class)
     iri: IRI,
     name: String,
     source: DataSource,
@@ -64,6 +64,8 @@ class Person(
 )
 
 class UnknownEntity(
+    @JsonSerialize(using = IriSerializer::class)
+    @JsonDeserialize(using = IriDeserializer::class)
     iri: IRI,
     name: String,
     source: DataSource
@@ -75,6 +77,8 @@ class UnknownEntity(
 )
 
 class RegisteredAddress(
+    @JsonSerialize(using = IriSerializer::class)
+    @JsonDeserialize(using = IriDeserializer::class)
     iri: IRI,
     name: String,
     source: DataSource,

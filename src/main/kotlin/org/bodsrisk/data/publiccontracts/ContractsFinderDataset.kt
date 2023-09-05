@@ -1,113 +1,100 @@
 package org.bodsrisk.data.publiccontracts
 
-import co.elastic.clients.elasticsearch.indices.ElasticsearchIndicesClient
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.slink.string.cleanWhitespace
 import jakarta.inject.Singleton
-import org.apache.commons.csv.CSVPrinter
 import org.bodsrisk.data.importer.DataImporter
+import org.bodsrisk.data.importer.FileImportTask
 import org.bodsrisk.data.importer.FileSource
-import org.bodsrisk.data.importer.ImportTask
 import org.bodsrisk.data.importer.Unpack
-import org.bodsrisk.data.sameasdb.SameAsRecord
-import org.bodsrisk.elasticsearch.indexExists
+import org.bodsrisk.elasticsearch.ElasticsearchDocument
 import org.bodsrisk.model.ocds.PublicContract
-import org.bodsrisk.model.ocds.Supplier
 import org.bodsrisk.rdf.vocabulary.BodsRisk
-import org.bodsrisk.utils.csvPrintFormat
-import org.bodsrisk.utils.readCsv
-import org.bodsrisk.utils.toJsonString
 import org.bodsrisk.utils.toPojo
-import org.rdf4k.StatementsBatch
-import java.io.File
-import java.io.FileWriter
+import org.eclipse.rdf4j.model.Statement
 
 @Singleton
-class ContractsFinderDataset(
-    private val esIndices: ElasticsearchIndicesClient,
-) : DataImporter {
+class ContractsFinderDataset : DataImporter() {
 
-    private val source = FileSource.Remote(DOWNLOAD_URL).unpack(Unpack.ZIP)
-    override val requiresImport: Boolean = !esIndices.indexExists(INDEX)
-
-    override fun buildTask(task: ImportTask) {
-        task.source(source)
-            .importRdf { file, rdfBatch ->
-                file.forEachLine { jsonString ->
-                    val contract = jsonString.toPojo(PublicContract::class)
-                    addRdfStatements(contract, rdfBatch)
-                }
-            }.index(INDEX) { file, docBatch ->
-                file.forEachLine { jsonString ->
-                    val contract = jsonString.toPojo(PublicContract::class)
-                    docBatch.add(jsonString, contract.id)
-                }
+    override fun createImportTask(): FileImportTask {
+        return importTask {
+            source(FileSource.Remote(DOWNLOAD_URL).unpack(Unpack.ZIP))
+            withIndex(INDEX)
+            importRdf { line ->
+                getRdfStatements(line.toPojo(PublicContract::class))
             }
+            index(INDEX) { line ->
+                val contract = line.toPojo(PublicContract::class)
+                ElasticsearchDocument(line, contract.id)
+            }
+        }
     }
 
-    private fun addRdfStatements(contract: PublicContract, rdfBatch: StatementsBatch) {
+    private fun getRdfStatements(contract: PublicContract): List<Statement> {
+        val statements = mutableListOf<Statement>()
         contract.suppliers
             .filter { it.id.isNotBlank() }
             .forEach { supplier ->
                 val supplierId = supplier.id.replace(REGEX_SUPPLIER_ID, "")
-                rdfBatch.add(BodsRisk.awardedPublicContract(supplierId, contract.id))
+                statements.add(BodsRisk.awardedPublicContract(supplierId, contract.id))
                 supplier.registrationNumber?.let { regno ->
-                    rdfBatch.add(BodsRisk.awardedPublicContract(regno, contract.id))
+                    statements.add(BodsRisk.awardedPublicContract(regno, contract.id))
                 }
             }
+        return statements
     }
 
-    internal fun generateSameAsRecords() {
-        val companyRefs = File("data/public-contracts/supplier-names.csv").readCsv<CompanyRef>()
-        val sameAsRecords = mutableMapOf<String, SameAsRecord>()
-        source.forEachFile { file ->
-            file.forEachLine { jsonString ->
-                val contract = jsonString.toPojo(PublicContract::class)
-                contract.suppliers
-                    .filter { it.name != null }
-                    .forEach { supplier ->
-                        val cleanName = supplier.name!!.cleanWhitespace().uppercase()
-                        companyRefs.firstOrNull { cleanName.startsWith(it.cleanPrefix) }
-                            ?.let {
-                                val regno = it.companyNumber
-                                sameAsRecords.putIfAbsent(
-                                    regno,
-                                    SameAsRecord(BodsRisk.company(regno).toString(), "gb-contracts-finder")
-                                )
-                                sameAsRecords[regno]!!
-                                    .addId(BodsRisk.company(supplier.id).toString())
-                                    .addReference("Matched Contracts Finder name '${it.companyNamePrefix}' against '${supplier.name}'")
-                            }
-                    }
-            }
-
-            File("data/same-as-db.jsonl").writeText(
-                sameAsRecords.values.joinToString("\n") { it.toJsonString() }
-            )
-        }
-    }
-
-    internal fun generateSupplierIds() {
-        val suppliers = mutableListOf<Supplier>()
-        source.forEachFile { file ->
-            file.forEachLine { jsonString ->
-                val contract = jsonString.toPojo(PublicContract::class)
-                suppliers.addAll(contract.suppliers.filter { it.name != null })
-            }
-        }
-        val cleanSuppliers = suppliers
-            .map { it.copy(id = it.id, name = it.name!!.cleanWhitespace().uppercase()) }
-            .toSet()
-            .sortedBy { it.name }
-        CSVPrinter(
-            FileWriter(File("etc/all-suppliers.csv")),
-            csvPrintFormat("ID", "Name")
-        ).use { printer ->
-            cleanSuppliers.forEach {
-                printer.printRecord(it.id, it.name)
-            }
-        }
-    }
+//    internal fun generateSameAsRecords() {
+//        val companyRefs = File("data/public-contracts/supplier-names.csv").readCsv<CompanyRef>()
+//        val sameAsRecords = mutableMapOf<String, SameAsRecord>()
+//        source.forEachFile { file ->
+//            file.forEachLine { jsonString ->
+//                val contract = jsonString.toPojo(PublicContract::class)
+//                contract.suppliers
+//                    .filter { it.name != null }
+//                    .forEach { supplier ->
+//                        val cleanName = supplier.name!!.cleanWhitespace().uppercase()
+//                        companyRefs.firstOrNull { cleanName.startsWith(it.cleanPrefix) }
+//                            ?.let {
+//                                val regno = it.companyNumber
+//                                sameAsRecords.putIfAbsent(
+//                                    regno,
+//                                    SameAsRecord(BodsRisk.company(regno).toString(), "gb-contracts-finder")
+//                                )
+//                                sameAsRecords[regno]!!
+//                                    .addId(BodsRisk.company(supplier.id).toString())
+//                                    .addReference("Matched Contracts Finder name '${it.companyNamePrefix}' against '${supplier.name}'")
+//                            }
+//                    }
+//            }
+//
+//            File("data/same-as-db.jsonl").writeText(
+//                sameAsRecords.values.joinToString("\n") { it.toJsonString() }
+//            )
+//        }
+//    }
+//
+//    internal fun generateSupplierIds() {
+//        val suppliers = mutableListOf<Supplier>()
+//        source.forEachFile { file ->
+//            file.forEachLine { jsonString ->
+//                val contract = jsonString.toPojo(PublicContract::class)
+//                suppliers.addAll(contract.suppliers.filter { it.name != null })
+//            }
+//        }
+//        val cleanSuppliers = suppliers
+//            .map { it.copy(id = it.id, name = it.name!!.cleanWhitespace().uppercase()) }
+//            .toSet()
+//            .sortedBy { it.name }
+//        CSVPrinter(
+//            FileWriter(File("etc/all-suppliers.csv")),
+//            csvPrintFormat("ID", "Name")
+//        ).use { printer ->
+//            cleanSuppliers.forEach {
+//                printer.printRecord(it.id, it.name)
+//            }
+//        }
+//    }
 
     companion object {
         const val INDEX = "gb-public-contracts"

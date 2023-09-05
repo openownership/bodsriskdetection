@@ -11,8 +11,8 @@ categories:
       links:
         - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-13320726517544098931/risks
 
-    - name: Indirect risks - ICIJ
-      description: Entities which are related to a target and also appear in the ICIJ dataset
+    - name: Indirect risks - Address
+      description: Companies having the same registered address as other entities with risk
       links:
         - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-18078977022465671411/risks
 
@@ -27,7 +27,7 @@ categories:
     - name: Ultimate parents
       description: All the companies with direct or indirect control over a target (company)
       links:
-        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-12337862642105981237/parent-companies
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-12337862642105981237/ultimate-parents
 
     - name: Subsidiaries
       description: All the companies controlled directly or indirectly by a target (company)

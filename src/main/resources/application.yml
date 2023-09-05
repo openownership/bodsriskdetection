@@ -11,7 +11,6 @@ app:
     password: ${GRAPHDB_PASSWORD}
   data-import:
     run-at-startup: true
-#    importer-names: ContractsFinderDataset
 
 micronaut:
   views:

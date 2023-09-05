@@ -22,7 +22,7 @@ class IriTypeConverter : TypeConverter<String, IRI> {
 
 @Singleton
 class MicronautIriDeserializer : Deserializer<IRI> {
-    override fun deserialize(decoder: Decoder, context: Deserializer.DecoderContext, type: Argument<in IRI>): IRI? {
+    override fun deserialize(decoder: Decoder, context: Deserializer.DecoderContext, type: Argument<in IRI>): IRI {
         return decoder.decodeString().iri()
     }
 }
