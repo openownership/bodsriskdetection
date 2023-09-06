@@ -114,7 +114,7 @@ To start the application, run
 * [Open Ownership Register](https://register.openownership.org/download)
 * [OpenSanctions](https://www.opensanctions.org/datasets/) default dataset
 * [UK Public Contracts data](https://www.contractsfinder.service.gov.uk)
-* [ICIJ Offshore Leak](https://offshoreleaks.icij.org/)
+* [ICIJ Offshore Leaks](https://offshoreleaks.icij.org/)
 
 ### Importing data in an empty database
 TODO
