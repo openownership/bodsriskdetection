@@ -8,8 +8,8 @@ app:
     connection-url: http://localhost:7200
     username: admin
     password: admin
-  data-import:
-    importer-names: IcijDataset
+#  data-import:
+#    importer-names: IcijDataset
 
 micronaut:
   views:
