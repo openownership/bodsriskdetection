@@ -113,11 +113,11 @@ abstract class DataImporter {
     }
 
     private fun readLines(file: File, handleLine: (String) -> Unit) {
-        var count = 0
+        var count = 1
         file.useLines { lines ->
-            lines.forEachIndexed { index, line ->
+            lines.forEach { line ->
                 handleLine(line)
-                count = index
+                count++
                 if (count > 0 && count % 1_000_000 == 0) {
                     log.info("${this::class.simpleName} processed $count lines from $file")
                 }

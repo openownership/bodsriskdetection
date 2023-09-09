@@ -1,8 +1,11 @@
 package org.bodsrisk.controller.tree
 
 import io.micronaut.core.annotation.Introspected
-import org.bodsrisk.model.BodsGraph
+import org.bodsrisk.model.RiskGraph
 
+/**
+ * A structure used for UI rendering of a (risk) Graph
+ */
 @Introspected
 data class TreeResponse(
     val rootId: String,
@@ -15,19 +18,14 @@ data class TreeResponse(
     companion object {
         fun fromGraph(
             rootId: String,
-            graph: BodsGraph,
+            graph: RiskGraph,
             highlightedNodes: Set<String>,
             extraNode: ExtraNode? = null
         ): TreeResponse {
             return TreeResponse(
                 rootId = rootId,
                 nodes = graph.nodes.map { node ->
-                    TreeNode(
-                        entity = node.entity,
-                        risks = node.data.risks,
-                        publicContractCount = node.data.publicContracts,
-                        highlighted = highlightedNodes.contains(node.entity.iri.toString())
-                    )
+                    TreeNode(node, highlightedNodes.contains(node.id))
                 },
                 relationships = graph.relationships.map { TreeRelationship(it) },
                 highlightedNodes = highlightedNodes.map { it }.toSet(),

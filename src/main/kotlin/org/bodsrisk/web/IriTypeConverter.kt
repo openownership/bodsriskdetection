@@ -8,6 +8,7 @@ import io.micronaut.serde.Deserializer
 import jakarta.inject.Singleton
 import org.eclipse.rdf4j.model.IRI
 import org.rdf4k.iri
+import org.rdf4k.toIri
 import java.util.*
 
 @Singleton
@@ -15,7 +16,7 @@ class IriTypeConverter : TypeConverter<String, IRI> {
 
     override fun convert(input: String?, targetType: Class<IRI>?, context: ConversionContext?): Optional<IRI> {
         return input?.let {
-            Optional.of(input.iri())
+            Optional.of(input.toIri())
         } ?: Optional.empty()
     }
 }
@@ -23,7 +24,7 @@ class IriTypeConverter : TypeConverter<String, IRI> {
 @Singleton
 class MicronautIriDeserializer : Deserializer<IRI> {
     override fun deserialize(decoder: Decoder, context: Deserializer.DecoderContext, type: Argument<in IRI>): IRI {
-        return decoder.decodeString().iri()
+        return decoder.decodeString().toIri()
     }
 }
 

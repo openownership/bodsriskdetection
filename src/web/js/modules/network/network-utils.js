@@ -219,8 +219,12 @@ function labelHtml(nodeData, networkSettings, extraNode) {
         });
     }
 
+    let label = nodeData.showLink
+        ? `<a href="${networkSettings.nodeUrl(nodeData)}" target="_blank">${nodeData.name}</a>`
+        : `<div>${nodeData.name}</div>`;
+
     return `<div class="label ${extraNode && extraNode.relatedTo === nodeData.id ? 'left-of-circle' : ''}">
-                <div class="text"><a href="${networkSettings.nodeUrl(nodeData)}" target="_blank">${nodeData.name}</a></div>
+                <div class="text">${label}</div>
                 <div class="tags">${tags}</div>
            </div>`;
 }

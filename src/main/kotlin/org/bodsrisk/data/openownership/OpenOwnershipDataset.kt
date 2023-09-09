@@ -106,7 +106,10 @@ class OpenOwnershipDataset(
         const val INDEX = "open-ownership"
 
         private const val DOWNLOAD_URL =
-            "https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz"
+            "https://public-bods.s3-eu-west-1.amazonaws.com/exports/ex20230722_all.jsonl.gz"
+
+//        private const val DOWNLOAD_URL =
+//            "https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz"
 
         private val bodsRdfConfig = BodsRdfConfig(relationshipsOnly = true)
             .withPlugins(CompaniesHouseRefPlugin())

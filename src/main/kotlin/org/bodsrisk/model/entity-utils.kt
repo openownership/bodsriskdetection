@@ -25,18 +25,18 @@ internal val BodsStatementType.entityType: EntityType
 internal fun BodsStatement.toEntity(): Entity {
     return when (this.statementType.entityType) {
         EntityType.LEGAL_ENTITY -> LegalEntity(
-            this.iri(),
-            this.name,
-            DataSource.OpenOwnership,
-            this.identifier("GB-COH"),
-            this.jurisdictionCode?.let { Country.byCode(it) })
+            iri = this.iri(),
+            name = this.name,
+            source = DataSource.OpenOwnership,
+            registrationNumber = this.identifier("GB-COH"),
+            jurisdiction = this.jurisdictionCode?.let { Country.byCode(it) })
 
         EntityType.PERSON -> Person(
-            this.iri(),
-            this.name,
-            DataSource.OpenOwnership,
-            this.json.string("birthDate"),
-            this.nationalities.map { Country.byCode(it)!! })
+            iri = this.iri(),
+            name = this.name,
+            source = DataSource.OpenOwnership,
+            dateOfBirth = this.json.string("birthDate"),
+            nationalities = this.nationalities.map { Country.byCode(it)!! })
 
         else -> throw IllegalStateException("Statement ${this.id} is not a legal entity or a person")
     }

@@ -3,8 +3,7 @@ package org.bodsrisk.service.network
 import io.slink.id.uuid
 import jakarta.inject.Singleton
 import org.bodsrisk.model.*
-import org.bodsrisk.model.graph.Graph
-import org.bodsrisk.model.graph.GraphNode
+import org.bodsrisk.model.graph.GraphNodeType
 import org.bodsrisk.model.graph.Relationship
 import org.bodsrisk.rdf.allValues
 import org.bodsrisk.rdf.asStrings
@@ -25,7 +24,7 @@ class NetworkService(
     private val riskService: RiskService
 ) {
 
-    fun uboGraph(target: IRI): BodsGraph {
+    fun uboGraph(target: IRI): RiskGraph {
         val rows = rdfRepository.sparqlSelectClasspath("sparql/network/ubo-chains.sparql", "target" to target)
         val parentIds = rows.map { it.iri("ubo") }.toSet()
         return graph(rows)
@@ -33,7 +32,7 @@ class NetworkService(
             .addNodeData(riskService, rdfRepository)
     }
 
-    fun relationshipChain(source: IRI, destination: IRI): BodsGraph {
+    fun relationshipChain(source: IRI, destination: IRI): RiskGraph {
         val rows = rdfRepository.sparqlSelectClasspath(
             "sparql/network/relationship-chain.sparql",
             "source" to source,
@@ -44,9 +43,9 @@ class NetworkService(
             .addNodeData(riskService, rdfRepository)
     }
 
-    fun sameAddressGraph(entity1: IRI, entity2: IRI): BodsGraph {
-        val node1 = GraphNode(entity = entityResolver.resolveEntities(entity1)!!, BodsNodeData())
-        val node2 = GraphNode(entity = entityResolver.resolveEntities(entity2)!!, BodsNodeData())
+    fun sameAddressGraph(entity1: IRI, entity2: IRI): RiskGraph {
+        val node1 = entityResolver.resolveEntities(entity1)!!.toRiskGraphNode()
+        val node2 = entityResolver.resolveEntities(entity2)!!.toRiskGraphNode()
 
         val fullAddress = rdfRepository.sparqlSelectClasspath(
             "sparql/network/get-common-registered-address.sparql",
@@ -56,12 +55,13 @@ class NetworkService(
             .str("fullAddress")
 
         val addressIri = BodsRisk.entity(uuid())
-        val address = GraphNode(
-            entity = RegisteredAddress(addressIri, fullAddress, DataSource.OpenOwnership, fullAddress),
-            BodsNodeData()
+        val address = RiskGraphNode(
+            id = addressIri.toString(),
+            name = fullAddress,
+            type = GraphNodeType.ADDRESS,
         )
 
-        val sameAddressGraph = BodsGraph(
+        val sameAddressGraph = RiskGraph(
             nodes = listOf(node1, node2, address),
             relationships = setOf(
                 Relationship(
@@ -79,8 +79,8 @@ class NetworkService(
         return sameAddressGraph.addNodeData(riskService, rdfRepository)
     }
 
-    fun parentCompanies(target: IRI): BodsGraph {
-        var graph = emptyBodsGraph()
+    fun parentCompanies(target: IRI): RiskGraph {
+        var graph = emptyRiskGraph()
         val ultimateParents = ultimateParents(target)
         ultimateParents.forEach { ultimateParentId ->
             graph += childCompanies(ultimateParentId)
@@ -91,7 +91,7 @@ class NetworkService(
     }
 
     fun corporateGroup(target: IRI): CorporateGroup {
-        var graph = emptyBodsGraph()
+        var graph = emptyRiskGraph()
         val ultimateParents = ultimateParents(target)
         ultimateParents.forEach { ultimateParentId ->
             graph += childCompanies(ultimateParentId)
@@ -115,16 +115,16 @@ class NetworkService(
             .map { it.str("relationship") }
     }
 
-    private fun graph(bindings: Collection<BindingSet>): BodsGraph {
+    private fun graph(bindings: Collection<BindingSet>): RiskGraph {
         val entities = entityResolver.resolveEntities(bindings.allValues(RdfConst.FIELD_PARENT, RdfConst.FIELD_CHILD))
         val relationships = entityResolver.resolveRelationships(bindings.allValues(RdfConst.FIELD_CTRL_STATEMENT))
-        return Graph(
-            nodes = entities.values.map { GraphNode(it, BodsNodeData()) },
+        return RiskGraph(
+            nodes = entities.values.map { it.toRiskGraphNode() },
             relationships = bindings.toRelationships { relationships[it]!! }.toSet()
         )
     }
 
-    fun childCompanies(parent: IRI): BodsGraph {
+    fun childCompanies(parent: IRI): RiskGraph {
         val rows = rdfRepository.sparqlSelectClasspath(
             "sparql/network/child-companies.sparql",
             "ultimateParent" to parent

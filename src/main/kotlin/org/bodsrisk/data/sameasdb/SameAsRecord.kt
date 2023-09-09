@@ -3,6 +3,7 @@ package org.bodsrisk.data.sameasdb
 import org.bodsrisk.rdf.sameAs
 import org.eclipse.rdf4j.model.Statement
 import org.rdf4k.iri
+import org.rdf4k.toIri
 
 data class SameAsRecord(
     val ids: MutableSet<String>,
@@ -28,8 +29,8 @@ fun SameAsRecord.rdfStatements(): List<Statement> {
     val statements = mutableListOf<Statement>()
     val idsList = ids.toList()
     for (index in 0 until idsList.size - 1) {
-        val id = idsList[index].iri()
-        val nextId = idsList[index + 1].iri()
+        val id = idsList[index].toIri()
+        val nextId = idsList[index + 1].toIri()
         statements.add(id.sameAs(nextId))
     }
     return statements

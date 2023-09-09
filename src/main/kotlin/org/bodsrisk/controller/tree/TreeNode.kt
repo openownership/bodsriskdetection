@@ -1,6 +1,7 @@
 package org.bodsrisk.controller.tree
 
-import org.bodsrisk.model.Entity
+import org.bodsrisk.model.RiskGraphNode
+import org.bodsrisk.model.graph.GraphNodeType
 import org.bodsrisk.model.risk.Risk
 import org.bodsrisk.utils.plural
 
@@ -9,21 +10,21 @@ data class TreeNode(
     val name: String,
     val type: String,
     val tags: List<NodeTag>,
-    var highlighted: Boolean = false
+    var highlighted: Boolean = false,
+    val showLink: Boolean = true,
 ) {
 
     constructor(
-        entity: Entity,
-        risks: List<Risk>,
-        publicContractCount: Int,
+        node: RiskGraphNode,
         highlighted: Boolean = false
     ) : this(
-        id = entity.iri.toString(),
-        name = entity.name,
-        type = entity.type.name,
-        tags = risks.toTags()
-            .plus(contractTags(publicContractCount)),
-        highlighted = highlighted
+        id = node.id,
+        name = node.name,
+        type = node.type.name,
+        tags = (node.data?.risks ?: emptyList()).toTags()
+            .plus(contractTags(node.data?.publicContracts ?: 0)),
+        highlighted = highlighted,
+        showLink = node.type != GraphNodeType.ADDRESS
     )
 
 }

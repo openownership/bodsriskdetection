@@ -1,7 +1,5 @@
 package org.bodsrisk.model.graph
 
-import org.bodsrisk.model.Entity
-
 data class Graph<NodeData>(
     val nodes: Collection<GraphNode<NodeData>>,
     val relationships: Set<Relationship>,
@@ -48,6 +46,15 @@ data class Graph<NodeData>(
 }
 
 data class GraphNode<NodeData>(
-    val entity: Entity,
-    var data: NodeData
+    val id: String,
+    val name: String,
+    var type: GraphNodeType,
+    var data: NodeData?= null
 )
+
+enum class GraphNodeType {
+    LEGAL_ENTITY,
+    PERSON,
+    UNKNOWN,
+    ADDRESS
+}

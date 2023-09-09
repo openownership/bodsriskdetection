@@ -117,5 +117,20 @@ To start the application, run
 * [ICIJ Offshore Leak](https://offshoreleaks.icij.org/)
 
 ### Importing data in an empty database
-TODO
+Please note that the import process takes several hours and it shouldn't be required
+unless you are also performing code changes that affect how data is ingested and processed.
+
+Firstly wipe the Docker images:
+```shell
+cd devops/docker
+./docker-wipe.sh
+```
+
+From the root directory simply start the application, which will trigger a data import
+when the database is empty:
+```shell
+./run.sh
+```
+
+
 

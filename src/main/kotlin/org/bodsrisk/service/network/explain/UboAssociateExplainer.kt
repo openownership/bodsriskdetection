@@ -3,9 +3,9 @@ package org.bodsrisk.service.network.explain
 import io.slink.string.titleCaseFirstChar
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import org.bodsrisk.model.BodsNodeData
 import org.bodsrisk.model.RelatedEntityRelationship
-import org.bodsrisk.model.graph.GraphNode
+import org.bodsrisk.model.RiskNodeData
+import org.bodsrisk.model.toRiskGraphNode
 import org.bodsrisk.service.network.GraphType
 import org.bodsrisk.service.network.RelationshipExplanation
 import org.bodsrisk.service.risk.RiskService
@@ -32,7 +32,7 @@ class UboAssociateExplainer : RelationshipExplainer(RelatedEntityRelationship.UB
             graph = networkService.relationshipChain(intermediateEntity, target),
             graphType = GraphType.ReverseTree,
             relevantNodes = setOf(target, relatedEntity),
-            extraNode = GraphNode(extraEntity, BodsNodeData(risks = risks)), // TODO: This needs to move in a service
+            extraNode = extraEntity.toRiskGraphNode(RiskNodeData(risks = risks)), // TODO: This needs to move in a service
             extraNodeRelationshipDetails = familyRelationship.map { it.titleCaseFirstChar() },
             intermediateEntity = intermediateEntity.toString()
         )

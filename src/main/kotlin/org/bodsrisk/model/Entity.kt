@@ -20,7 +20,6 @@ import org.eclipse.rdf4j.model.IRI
     JsonSubTypes.Type(value = LegalEntity::class, name = "LEGAL_ENTITY"),
     JsonSubTypes.Type(value = Person::class, name = "PERSON"),
     JsonSubTypes.Type(value = UnknownEntity::class, name = "UNKNOWN"),
-    JsonSubTypes.Type(value = RegisteredAddress::class, name = "REGISTERED_ADDRESS")
 )
 abstract class Entity(
     val iri: IRI,
@@ -73,20 +72,5 @@ class UnknownEntity(
     iri = iri,
     name = name,
     type = EntityType.UNKNOWN,
-    source = source
-)
-
-class RegisteredAddress(
-    @JsonSerialize(using = IriSerializer::class)
-    @JsonDeserialize(using = IriDeserializer::class)
-    iri: IRI,
-    name: String,
-    source: DataSource,
-
-    val fullAddress: String
-) : Entity(
-    iri = iri,
-    name = name,
-    type = EntityType.REGISTERED_ADDRESS,
     source = source
 )

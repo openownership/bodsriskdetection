@@ -5,6 +5,7 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.views.View
 import org.bodsrisk.controller.tree.TreeResponse
+import org.bodsrisk.model.graph.GraphNodeType
 import org.bodsrisk.service.BodsService
 import org.bodsrisk.service.PublicContractsService
 import org.bodsrisk.service.entityresolver.EntityResolver
@@ -60,8 +61,8 @@ class ProfileController(
         val graph = publicContractsService.childCompaniesContracts(target)
         val highlightedNodes = setOf(targetId.toString())
             .plus(graph.nodes
-                .filter { it.data.publicContracts > 0 }
-                .map { it.entity.iri.toString() }
+                .filter { (it.data?.publicContracts ?: 0) > 0 }
+                .map { it.id }
             )
         return TreeResponse.fromGraph(targetId.toString(), graph, highlightedNodes)
             .profileTreeResponse(targetId)
@@ -72,7 +73,9 @@ class ProfileController(
     fun ubos(@PathVariable("target") targetId: IRI): ProfileResponse<String> {
         val graph = networkService.uboGraph(targetId)
         val highlightedNodes = setOf(targetId.toString())
-            .plus(graph.nodes.filter { it.entity.isPerson }.map { it.entity.iri.toString() })
+            .plus(graph.nodes.filter { it.type == GraphNodeType.PERSON }
+                .map { it.id }
+            )
         return TreeResponse.fromGraph(targetId.toString(), graph, highlightedNodes)
             .profileTreeResponse(targetId)
     }

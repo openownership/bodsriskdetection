@@ -37,8 +37,8 @@ class PublicContractsService(
         )
     }
 
-    fun childCompaniesContracts(target: Entity): BodsGraph {
-        var graph = emptyBodsGraph()
+    fun childCompaniesContracts(target: Entity): RiskGraph {
+        var graph = emptyRiskGraph()
 
         rdfRepository
             .sparqlSelectClasspath(

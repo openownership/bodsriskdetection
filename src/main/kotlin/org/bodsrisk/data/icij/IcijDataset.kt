@@ -22,6 +22,7 @@ import org.eclipse.rdf4j.model.IRI
 import org.rdf4k.iri
 import org.rdf4k.literal
 import org.rdf4k.statement
+import org.rdf4k.toIri
 
 @Singleton
 class IcijDataset(
@@ -64,6 +65,7 @@ class IcijDataset(
             files("nodes-entities.csv", "nodes-officers.csv") {
                 csvToRdf { csvRecord ->
                     val targetIri = BodsRisk.icijEntity(csvRecord.nodeId)
+
                     // We only need the risks in RDF for now
                     listOf(
                         statement(targetIri, BodsRisk.PROP_HAS_RISK, "icij".literal()),
@@ -71,6 +73,8 @@ class IcijDataset(
                     )
                 }
                 indexCsv(INDEX) { csvRecord ->
+
+                    // We use UnknownEntity here because the ICIJ data isn't specific about the entity type
                     val entity = UnknownEntity(
                         iri = BodsRisk.icijEntity(csvRecord.nodeId),
                         name = csvRecord["name"],
@@ -83,15 +87,7 @@ class IcijDataset(
     }
 
     fun getEntities(iris: Collection<IRI>): Map<String, Entity> {
-        return esClient.findByIds<JsonData>(INDEX, iris.map { it.localName })
-            .map { entry ->
-                val json = entry.value.toJson() as JsonObject
-                entry.key to UnknownEntity(
-                    iri = json.getString("iri").iri(),
-                    name = json.getString("name")!!,
-                    source = DataSource.ICIJ
-                )
-            }.toMap()
+        return esClient.findByIds<UnknownEntity>(INDEX, iris.map { it.localName })
     }
 
     companion object {

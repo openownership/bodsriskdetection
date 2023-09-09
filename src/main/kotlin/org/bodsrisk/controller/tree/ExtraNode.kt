@@ -1,6 +1,6 @@
 package org.bodsrisk.controller.tree
 
-import org.bodsrisk.model.BodsNodeData
+import org.bodsrisk.model.RiskNodeData
 import org.bodsrisk.model.graph.GraphNode
 
 data class ExtraNode(
@@ -12,13 +12,13 @@ data class ExtraNode(
 
     constructor(
         relatedTo: String,
-        node: GraphNode<BodsNodeData>,
+        node: GraphNode<RiskNodeData>,
         relationshipDetails: List<String>,
         relationshipDirection: Direction
     ) : this(
-        node = TreeNode(node.entity, node.data.risks, 0, true),
+        node = TreeNode(node, true),
         relatedTo = relatedTo,
-        relationship = TreeRelationship(node.entity.iri.toString(), relatedTo, relationshipDetails),
+        relationship = TreeRelationship(node.id, relatedTo, relationshipDetails),
         relationshipDirection = relationshipDirection
     )
 
