@@ -5,7 +5,9 @@ Given a target (individual or entity), we want to be able to identify any compan
 control (directly or indirectly) which have been awarded public contracts. This can bring a higher order of visibility
 and transparency over larger corporate groups in terms of their reliance on public procurement.
 
-[Public contracts demo](https://drive.google.com/file/d/10VOnx_073Su4KwnDDIgRwIr0Lp4n05hz/view?usp=drive_link)
+## Resources
+* [Public contracts demo](https://drive.google.com/file/d/10VOnx_073Su4KwnDDIgRwIr0Lp4n05hz/view?usp=drive_link)
+* [SPARQL Query to identify contracts for related entities](https://github.com/openownership/bodsriskdetection/blob/main/src/main/resources/sparql/public-contracts/contracts-for-related-entities.sparql)
 
 ## Record linking
 
@@ -79,3 +81,4 @@ one would have to devise algorithms based on company names and addresses, which 
 It's important to note that this PoC is relying exclusively on the small subset of Contracts Finder records where
 a Companies House number has been provided. This was sufficient to demonstrate the record linking capability for this use case,
 but it's not practical for wider applications.
+

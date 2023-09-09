@@ -15,7 +15,9 @@ For the purposes of our PoC we have relaxed the definition to include any indivi
 an entity. This is suitable for most cases, but in a real-world application there might a filtering logic based on the level
 of equity will need to be considered. We deliberately left this out of the scope of this PoC.
 
-[UBO Demo](https://drive.google.com/file/d/18lG9LSm6xAZzXAhBugPA1P-wIPR3ijsq/view?usp=drive_link)
+### Resources
+* [UBO Demo](https://drive.google.com/file/d/18lG9LSm6xAZzXAhBugPA1P-wIPR3ijsq/view?usp=drive_link)
+* [SPARQL for extracting UBO (chains)](https://github.com/openownership/bodsriskdetection/blob/main/src/main/resources/sparql/network/ubo-chains.sparql)
 
 ### Graph traversal logic
 In order to determine the UBOs for a given target (company), we must navigate the ownership chain upwards
@@ -85,7 +87,9 @@ for a target and there can be several entities that need to be identified for th
 The logic to produce is very similar to UBOs: we're interested in entities "at the top", which have some direct or indirect
 control over the target.
 
-[Ultimate parents demo](https://drive.google.com/file/d/1FPGz1fsTUnfsUxtb9hhAqBpjXJJhjcsI/view?usp=drive_link)
+### Resources
+* [Ultimate parents demo](https://drive.google.com/file/d/1FPGz1fsTUnfsUxtb9hhAqBpjXJJhjcsI/view?usp=drive_link)
+* [SPARQL query to identify ultimate parents](https://github.com/openownership/bodsriskdetection/blob/main/src/main/resources/sparql/network/ultimate-parents.sparql)
 
 ![](screenshots/ultimate-parents.png)
 
@@ -174,7 +178,9 @@ purposes or investigative efforts.
 The outcome here is symmetric to ultimate parents, but instead of traversing the ownership relationships upwards, we
 navigate "downwards".
 
-[Subsidiaries demo](https://drive.google.com/file/d/1hINxKzmPTui7MSXCzVpFfIgAS_TaHzqt/view?usp=drive_link)
+### Resources
+* [Subsidiaries demo](https://drive.google.com/file/d/1hINxKzmPTui7MSXCzVpFfIgAS_TaHzqt/view?usp=drive_link)
+* [SPARQL query to identify child companies / subsidiaries](https://github.com/openownership/bodsriskdetection/blob/main/src/main/resources/sparql/network/child-companies.sparql)
 
 ![](screenshots/subsidiaries.png)
 

@@ -11,7 +11,13 @@ what we called indirect risks: third parties connected to a target which are the
 The process of attaching PEP/Sanctions data to BODS records relies on the [OpenSanctions](https://www.opensanctions.org/)
 dataset, which is commonly used in a variety of Risk & Compliance use cases.
 
-[PEP/Sanctions Demo](https://drive.google.com/file/d/1LRqfMuaQriMdqGA8T8jY3Ga6-iwDnHYw/view?usp=drive_link)
+## Resources
+* [PEP/Sanctions Demo](https://drive.google.com/file/d/1LRqfMuaQriMdqGA8T8jY3Ga6-iwDnHYw/view?usp=drive_link)
+* Queries for identifying related entities with risks:
+  * [Risks for child companies](https://github.com/openownership/bodsriskdetection/blob/main/src/main/resources/sparql/risk/find-risks-for-children.sparql) (subsidiaries or companies controlled by an individual)
+  * [Risks for parent companies](https://github.com/openownership/bodsriskdetection/blob/main/src/main/resources/sparql/risk/find-risks-for-parents.sparql)
+  * [Risks for the relatives of a UBO](https://github.com/openownership/bodsriskdetection/blob/main/src/main/resources/sparql/risk/find-risks-for-ubo-relatives.sparql)
+  * [Risks for the associates of a UBO](https://github.com/openownership/bodsriskdetection/blob/main/src/main/resources/sparql/risk/find-risks-for-ubo-associates.sparql)
 
 ## Record linking
 This part of the PoC relies on linking records from Open Ownership with the ones from [Open Sanctions](https://www.opensanctions.org/). 

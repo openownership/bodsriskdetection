@@ -15,7 +15,11 @@ It's worth noting that exceptions (false positives) exist when we consider [comp
 which can yield thousands of entities registered to the same address. For our purposes it wasn't feasible to address this
 exception, and it must be considered as a special case to handle in a real-world application.
 
-[Registered Address Risk Demo](https://drive.google.com/file/d/1FdeKT4ky5tGWdGxfc1qq28exNZTa4p6Y/view?usp=drive_link)
+## Resources
+* [Registered Address Risk Demo](https://drive.google.com/file/d/1FdeKT4ky5tGWdGxfc1qq28exNZTa4p6Y/view?usp=drive_link)
+* [SPARQL query to identity entities with risks sharing a registered address with the target](https://github.com/openownership/bodsriskdetection/blob/main/src/main/resources/sparql/risk/find-risks-for-registered-address.sparql)
+
+
 ## Record linking
 
 Matching addresses is a non-trivial problem with a variety of approaches having different degrees of complexity.
