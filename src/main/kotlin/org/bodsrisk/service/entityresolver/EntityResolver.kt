@@ -35,6 +35,10 @@ class EntityResolver(private val dataSourceResolvers: List<DataSourceResolver>) 
                 val sourceEntities = resolversBySource[dataSource]!!.resolveRelationships(sourceIris)
                 relationships.putAll(sourceEntities)
             }
+        if (relationships.size < iris.size) {
+            val unresolved = iris.filter { it !in relationships.keys }
+            log.warn("Could not resolve ${unresolved.size} of ${iris.size} relationships: " + unresolved.joinToString(", "))
+        }
         return relationships
     }
 

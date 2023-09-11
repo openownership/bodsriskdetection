@@ -8,7 +8,7 @@ class FileImportTaskTest : StringSpec({
 
     "single job" {
         val content = mutableListOf<String>()
-        val task = FileImportTask().apply {
+        val task = StatelessTask().apply {
             source(textSource)
             addFileConsumer {
                 content.addAll(it.readLines())
@@ -20,7 +20,7 @@ class FileImportTaskTest : StringSpec({
 
     "multiple jobs" {
         val content = mutableListOf<String>()
-        val task = FileImportTask().apply {
+        val task = StatelessTask().apply {
             source(textSource)
             addFileConsumer {
                 content.addAll(it.readLines())
@@ -35,7 +35,7 @@ class FileImportTaskTest : StringSpec({
 
     "withFile - conditional" {
         val content = mutableListOf<String>()
-        val task = FileImportTask().apply {
+        val task = StatelessTask().apply {
             source(textSource)
             withFiles({
                 content.addAll(it.readLines())

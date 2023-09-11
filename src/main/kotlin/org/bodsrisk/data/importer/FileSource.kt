@@ -28,13 +28,7 @@ sealed class FileSource {
         return this
     }
 
-    fun forEachFile(tempDir: TempDir, block: (File) -> Unit) {
-        loadFiles(tempDir).forEach { file ->
-            block(file)
-        }
-    }
-
-    protected open fun loadFiles(tempDir: TempDir): List<File> {
+    open fun getFiles(tempDir: TempDir): List<File> {
         log.info("Processing file source $this")
         val sourceFile = fetch(tempDir)
         val files = mutableListOf<File>()
@@ -99,7 +93,7 @@ sealed class FileSource {
             return tempDir.newFile()
         }
 
-        override fun loadFiles(tempDir: TempDir): List<File> {
+        override fun getFiles(tempDir: TempDir): List<File> {
             val allFiles = mutableListOf<File>()
             files.forEach {
                 val dir = tempDir.newDirectory()

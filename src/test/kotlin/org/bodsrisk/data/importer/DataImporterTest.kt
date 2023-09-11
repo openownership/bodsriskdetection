@@ -21,8 +21,8 @@ class TestImporter : DataImporter() {
     val file2Content = mutableListOf<String>()
     val allContent = mutableListOf<String>()
 
-    override fun createImportTask(): FileImportTask {
-        return importTask {
+    override fun createImportTask(): StatelessTask {
+        return statelessTask {
             source(
                 FileSource.Static(
                     "file1.txt" to """

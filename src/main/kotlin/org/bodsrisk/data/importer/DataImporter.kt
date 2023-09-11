@@ -31,30 +31,37 @@ abstract class DataImporter {
     @Inject
     private lateinit var esIndices: ElasticsearchIndicesClient
 
-    abstract fun createImportTask(): FileImportTask
+    abstract fun createImportTask(): FileImportTask<*>
 
-    fun importTask(block: FileImportTask.() -> Unit): FileImportTask {
-        val importTask = FileImportTask()
+    fun <State> statefulTask(initialState: State, block: FileImportTask<State>.() -> Unit): FileImportTask<State> {
+        val importTask = FileImportTask<State>()
+        importTask.initState(initialState)
         block(importTask)
         return importTask
     }
 
-    private fun FileImportTask.runIfIndexMissing(index: String) {
+    fun statelessTask(block: FileImportTask<Unit>.() -> Unit): StatelessTask {
+        val importTask = StatelessTask()
+        block(importTask)
+        return importTask
+    }
+
+    private fun <State> FileImportTask<State>.runIfIndexMissing(index: String) {
         runIf { !esIndices.indexExists(index) }
     }
 
-    private fun FileImportTask.createIndex(index: String) {
-        beforeStart {
+    private fun <State> FileImportTask<State>.createIndex(index: String) {
+        onStart {
             esIndices.forceCreateIndex(index)
         }
     }
 
-    fun FileImportTask.withIndex(index: String) {
+    fun <State> FileImportTask<State>.withIndex(index: String) {
         runIfIndexMissing(index)
         createIndex(index)
     }
 
-    fun <T> FileImportTask.index(
+    fun <T, State> FileImportTask<State>.index(
         index: String,
         indexBatchSize: Int = DEFAULT_INDEX_BATCH_SIZE,
         convert: (String) -> ElasticsearchDocument<T>
@@ -66,7 +73,7 @@ abstract class DataImporter {
         }
     }
 
-    fun FileImportTask.importRdf(
+    fun <State> FileImportTask<State>.importRdf(
         statementBatchSize: Int = DEFAULT_RDF_BATCH_SIZE,
         convert: (String) -> Collection<Statement>
     ) {
@@ -77,7 +84,7 @@ abstract class DataImporter {
         }
     }
 
-    fun <T> FileImportTask.indexCsv(
+    fun <T, State> FileImportTask<State>.indexCsv(
         index: String,
         batchSize: Int = DEFAULT_INDEX_BATCH_SIZE,
         convert: (CSVRecord) -> ElasticsearchDocument<T>
@@ -91,7 +98,7 @@ abstract class DataImporter {
         }
     }
 
-    fun FileImportTask.csvToRdf(
+    fun <State> FileImportTask<State>.csvToRdf(
         batchSize: Int = DEFAULT_RDF_BATCH_SIZE,
         convert: (CSVRecord) -> Collection<Statement>
     ) {
@@ -104,8 +111,8 @@ abstract class DataImporter {
         }
     }
 
-    fun FileImportTask.files(vararg fileNames: String, block: FileImportTask.() -> Unit) {
-        val task = FileImportTask()
+    fun <State> FileImportTask<State>.files(vararg fileNames: String, block: FileImportTask<State> .() -> Unit) {
+        val task = FileImportTask<State>()
         block(task)
         task.getConsumers().forEach { consumer ->
             withFiles(consumer, *fileNames)

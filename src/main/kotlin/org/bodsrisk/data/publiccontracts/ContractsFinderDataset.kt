@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import io.slink.string.cleanWhitespace
 import jakarta.inject.Singleton
 import org.bodsrisk.data.importer.DataImporter
-import org.bodsrisk.data.importer.FileImportTask
 import org.bodsrisk.data.importer.FileSource
+import org.bodsrisk.data.importer.StatelessTask
 import org.bodsrisk.data.importer.Unpack
 import org.bodsrisk.elasticsearch.ElasticsearchDocument
 import org.bodsrisk.model.ocds.PublicContract
@@ -16,8 +16,8 @@ import org.eclipse.rdf4j.model.Statement
 @Singleton
 class ContractsFinderDataset : DataImporter() {
 
-    override fun createImportTask(): FileImportTask {
-        return importTask {
+    override fun createImportTask(): StatelessTask {
+        return statelessTask {
             source(FileSource.Remote(DOWNLOAD_URL).unpack(Unpack.ZIP))
             withIndex(INDEX)
             importRdf { line ->

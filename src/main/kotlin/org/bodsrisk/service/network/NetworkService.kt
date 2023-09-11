@@ -16,6 +16,8 @@ import org.eclipse.rdf4j.repository.Repository
 import org.rdf4k.iri
 import org.rdf4k.sparqlSelectClasspath
 import org.rdf4k.str
+import org.rdf4k.toIri
+import org.slf4j.LoggerFactory
 
 @Singleton
 class NetworkService(
@@ -120,7 +122,12 @@ class NetworkService(
         val relationships = entityResolver.resolveRelationships(bindings.allValues(RdfConst.FIELD_CTRL_STATEMENT))
         return RiskGraph(
             nodes = entities.values.map { it.toRiskGraphNode() },
-            relationships = bindings.toRelationships { relationships[it]!! }.toSet()
+            relationships = bindings
+                .toRelationships { relationships[it]!! }
+                .filter {
+                    it.parentId.toIri() in entities.keys && it.childId.toIri() in entities.keys
+                }
+                .toSet()
         )
     }
 
@@ -139,6 +146,9 @@ class NetworkService(
             .toSet()
     }
 
+    companion object {
+        private val log = LoggerFactory.getLogger(NetworkService::class.java)
+    }
 }
 
 private fun bodsRelationship(row: BindingSet, getRelationship: (IRI) -> Relationship): Relationship {

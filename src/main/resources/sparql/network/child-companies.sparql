@@ -5,7 +5,7 @@ PREFIX onto:  <http://www.ontotext.com/>
 
 SELECT ?parent ?child ?controlStatement
 WHERE {
-    ?ultimateParent bods:ownsOrControls* ?parent .
+    bodsr:openownership-register-6893468895050709685 bods:ownsOrControls* ?parent .
     ?controlStatement bods:hasInterestedParty ?parent .
     ?controlStatement bods:hasSubject ?child .
     FILTER(STRSTARTS(STR(?parent), STR(bodsr:)))

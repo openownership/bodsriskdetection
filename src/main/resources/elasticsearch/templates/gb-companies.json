@@ -2,6 +2,7 @@
     "index_patterns": ["gb-company-refs*"],
     "template": {
         "mappings": {
+            "date_detection": false,
             "properties": {
                 "name": {
                     "type": "text"

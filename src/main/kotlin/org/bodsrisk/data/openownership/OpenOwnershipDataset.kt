@@ -8,7 +8,6 @@ import org.bodsrisk.data.importer.FileImportTask
 import org.bodsrisk.data.importer.FileSource
 import org.bodsrisk.data.importer.Unpack
 import org.bodsrisk.data.pscRefSlug
-import org.bodsrisk.elasticsearch.DocumentBatch
 import org.bodsrisk.elasticsearch.ElasticsearchDocument
 import org.bodsrisk.elasticsearch.delete
 import org.bodsrisk.model.Address
@@ -24,9 +23,7 @@ import org.kbods.rdf.toRdf
 import org.kbods.rdf.vocabulary.BodsSchemaVersion
 import org.kbods.rdf.vocabulary.BodsVocabulary
 import org.kbods.read.BodsStatement
-import org.kbods.read.useBodsStatements
 import org.slf4j.LoggerFactory
-import java.io.File
 
 @Singleton
 class OpenOwnershipDataset(
@@ -34,11 +31,12 @@ class OpenOwnershipDataset(
     private val esClient: ElasticsearchClient
 ) : DataImporter() {
 
-    override fun createImportTask(): FileImportTask {
-        return importTask {
+    override fun createImportTask(): FileImportTask<MutableList<String>> {
+        return statefulTask(mutableListOf()) {
             source(FileSource.Remote(DOWNLOAD_URL).unpack(Unpack.GZIP))
             withIndex(INDEX)
-            beforeStart {
+
+            onStart {
                 BodsVocabulary.write(rdfRepository, BodsSchemaVersion.V_0_2_0)
             }
             importRdf { line ->
@@ -51,32 +49,17 @@ class OpenOwnershipDataset(
                 val jsonString = bodsStatement.jsonString { st, json ->
                     json["allNames"] = st.allNames
                 }
-                // TODO: Review handling of replace
-//                replacedStatements.addAll(bodsStatement.replacesStatements)
+                state.addAll(bodsStatement.replacesStatements)
                 ElasticsearchDocument(jsonString, bodsStatement.id)
+            }
+            onFinish { state ->
+                log.info("Deleting ${state.size} replaced statements")
+                state.forEach {
+                    esClient.delete(INDEX, it)
+                }
             }
         }
     }
-
-    private fun index(jsonlFile: File, docBatch: DocumentBatch<String>) {
-        val replacedStatements = mutableListOf<String>()
-        log.info("Importing BODS file $jsonlFile to Elasticsearch")
-        jsonlFile.useBodsStatements { bodsStatements ->
-            bodsStatements
-                .forEach { bodsStatement ->
-                    val jsonString = bodsStatement.jsonString { st, json ->
-                        json["allNames"] = st.allNames
-                    }
-                    replacedStatements.addAll(bodsStatement.replacesStatements)
-                    docBatch.add(jsonString, bodsStatement.id)
-                }
-        }
-        log.info("Deleting ${replacedStatements.size} replaced statements")
-        replacedStatements.forEach {
-            esClient.delete(INDEX, it)
-        }
-    }
-
 
     private fun riskDetectionData(statement: BodsStatement): List<Statement> {
         val statements = mutableListOf<Statement>()

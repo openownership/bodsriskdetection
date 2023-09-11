@@ -6,7 +6,6 @@ import io.slink.datetime.humanReadableString
 import io.slink.files.TempDir
 import io.slink.files.withTempDir
 import jakarta.inject.Singleton
-import org.bodsrisk.utils.ThreadPool
 import org.slf4j.LoggerFactory
 import java.io.File
 import kotlin.time.measureTime
@@ -37,35 +36,17 @@ class ImportService(private val config: DataImportConfig) {
         }
     }
 
-    internal fun runImporter(tempDir: TempDir, importer: DataImporter) {
+    private fun runImporter(tempDir: TempDir, importer: DataImporter) {
         val name = importer::class.simpleName!!
         val task = importer.createImportTask()
-        if (task.runnable()) {
+        if (task.shouldRun) {
             log.info("Running data importer $name")
-            task.runBeforeStart()
             val duration = measureTime {
-                runTaskJobs(tempDir, name, task)
+                task.run(tempDir, JOB_POOL_SIZE)
             }
             log.info("Importer $name finished in ${duration.humanReadableString()}")
         } else {
             log.info("Importer $name doesn't need to run")
-        }
-    }
-
-    private fun runTaskJobs(tempDir: TempDir, importerName: String, task: FileImportTask) {
-        ThreadPool<Unit>(JOB_POOL_SIZE).use { threadPool ->
-            task.source.forEachFile(tempDir) { file ->
-                task.getConsumers().forEach { consumer ->
-                    threadPool.submit {
-                        try {
-                            consumer(file)
-                        } catch (e: Exception) {
-                            log.error("Error running importer $importerName with file $file", e)
-                            throw e
-                        }
-                    }
-                }
-            }
         }
     }
 

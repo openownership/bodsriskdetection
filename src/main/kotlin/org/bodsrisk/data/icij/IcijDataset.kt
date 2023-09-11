@@ -1,10 +1,8 @@
 package org.bodsrisk.data.icij
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient
-import co.elastic.clients.json.JsonData
 import io.slink.iso3166.Country
 import jakarta.inject.Singleton
-import jakarta.json.JsonObject
 import org.apache.commons.csv.CSVRecord
 import org.bodsrisk.data.importer.DataImporter
 import org.bodsrisk.data.importer.FileImportTask
@@ -19,18 +17,16 @@ import org.bodsrisk.model.UnknownEntity
 import org.bodsrisk.model.risk.riskId
 import org.bodsrisk.rdf.vocabulary.BodsRisk
 import org.eclipse.rdf4j.model.IRI
-import org.rdf4k.iri
 import org.rdf4k.literal
 import org.rdf4k.statement
-import org.rdf4k.toIri
 
 @Singleton
 class IcijDataset(
     private val esClient: ElasticsearchClient,
 ) : DataImporter() {
 
-    override fun createImportTask(): FileImportTask {
-        return importTask {
+    override fun createImportTask(): FileImportTask<Unit> {
+        return statelessTask {
             source(FileSource.Remote(DOWNLOAD_URL).unpack(Unpack.ZIP))
             withIndex(INDEX)
             files("nodes-addresses.csv") {

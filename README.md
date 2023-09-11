@@ -110,6 +110,8 @@ To start the application, run
 ./run.sh
 ```
 
+Once the application is started it will be accessible at http://localhost:8080/.
+
 ### Datasets in this PoC
 * [Open Ownership Register](https://register.openownership.org/download)
 * [OpenSanctions](https://www.opensanctions.org/datasets/) default dataset

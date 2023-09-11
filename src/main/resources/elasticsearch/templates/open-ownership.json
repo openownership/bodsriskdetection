@@ -4,6 +4,7 @@
     ],
     "template": {
         "mappings": {
+            "date_detection": false,
             "properties": {
                 "statementID": {
                     "type": "keyword"
@@ -13,6 +14,9 @@
                 },
                 "allNames": {
                     "type": "text"
+                },
+                "replacesStatements": {
+                    "type": "keyword"
                 }
             }
         }

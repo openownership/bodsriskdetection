@@ -6,6 +6,7 @@ import jakarta.inject.Singleton
 import org.bodsrisk.data.importer.DataImporter
 import org.bodsrisk.data.importer.FileImportTask
 import org.bodsrisk.data.importer.FileSource
+import org.bodsrisk.data.importer.StatelessTask
 import org.bodsrisk.elasticsearch.ElasticsearchDocument
 import org.bodsrisk.elasticsearch.terms
 import org.bodsrisk.utils.toKlaxonJson
@@ -15,8 +16,8 @@ class OpenSanctionsDataset(
     private val esClient: ElasticsearchClient,
 ) : DataImporter() {
 
-    override fun createImportTask(): FileImportTask {
-        return importTask {
+    override fun createImportTask(): StatelessTask {
+        return statelessTask {
             source(FileSource.Remote(DOWNLOAD_URL))
             withIndex(INDEX)
             importRdf { it.toKlaxonJson().toRdf() }

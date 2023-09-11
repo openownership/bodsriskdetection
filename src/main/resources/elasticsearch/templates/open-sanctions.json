@@ -4,6 +4,7 @@
     ],
     "template": {
         "mappings": {
+            "date_detection": false,
             "properties": {
                 "id": {
                     "type": "keyword"

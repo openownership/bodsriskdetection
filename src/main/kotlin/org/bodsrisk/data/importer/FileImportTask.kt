@@ -1,6 +1,9 @@
 package org.bodsrisk.data.importer
 
+import io.slink.files.TempDir
 import io.slink.files.withTempDir
+import org.bodsrisk.utils.ThreadPool
+import org.slf4j.LoggerFactory
 import java.io.File
 
 /**
@@ -8,18 +11,32 @@ import java.io.File
  *
  * @property source The FileSource to be used for this task
  * @property runIf Condition to validate this task should run (returns boolean)
- * @property beforeStart A function called before the task is run. This can be used for any initialisation logic
+ * @property onStart A function called before the task is run. This can be used for any initialisation logic
  * @property fileConsumers Handlers for the content of the files within the @source
  */
-class FileImportTask {
+class FileImportTask<State> {
 
     lateinit var source: FileSource
     private var runIf: (() -> Boolean)? = null
-    private var beforeStart = mutableListOf<(() -> Unit)>()
+    private var onStart = mutableListOf<(() -> Unit)>()
     private val fileConsumers = mutableListOf<(File) -> Unit>()
+    private val onFinish = mutableListOf<(State) -> Unit>()
+    private var internalState: State? = null
+
+    val state: State get() = internalState!!
+
+    val shouldRun: Boolean get() = runIf?.invoke() ?: true
 
     fun addFileConsumer(consumer: (File) -> Unit) {
         fileConsumers.add(consumer)
+    }
+
+    fun initState(state: State) {
+        this.internalState = state
+    }
+
+    fun onFinish(block: (State) -> Unit) {
+        onFinish.add(block)
     }
 
     fun withFiles(consumer: (File) -> Unit, vararg fileNames: String) {
@@ -38,20 +55,45 @@ class FileImportTask {
         this.runIf = runIf
     }
 
-    fun beforeStart(beforeStart: () -> Unit) {
-        this.beforeStart.add(beforeStart)
+    fun onStart(block: () -> Unit) {
+        this.onStart.add(block)
     }
 
     fun getConsumers(): List<(File) -> Unit> {
         return fileConsumers
     }
 
-    fun runnable(): Boolean {
-        return runIf?.invoke() ?: true
+
+    private fun start() {
+        onStart.forEach { it.invoke() }
     }
 
-    fun runBeforeStart() {
-        beforeStart.forEach { it.invoke() }
+    private fun end() {
+        if (internalState != null) {
+            onFinish.forEach { it(internalState!!) }
+        }
+    }
+
+    fun run(tempDir: TempDir, threadPoolSize: Int) {
+        if (shouldRun) {
+            start()
+            val files = source.getFiles(tempDir)
+            ThreadPool<Unit>(threadPoolSize).use { threadPool ->
+                files.forEach { file ->
+                    fileConsumers.forEach { consumer ->
+                        threadPool.submit {
+                            try {
+                                consumer(file)
+                            } catch (e: Exception) {
+                                log.error("Error processing file $file", e)
+                                throw e
+                            }
+                        }
+                    }
+                }
+            }
+            end()
+        }
     }
 
     /**
@@ -59,11 +101,17 @@ class FileImportTask {
      */
     fun runAllConsumers() {
         withTempDir(File("temp")) { tempDir ->
-            source.forEachFile(tempDir) { file ->
+            source.getFiles(tempDir).forEach { file ->
                 fileConsumers.forEach { consumer ->
                     consumer(file)
                 }
             }
         }
     }
+
+    companion object {
+        private val log = LoggerFactory.getLogger(FileImportTask::class.java)
+    }
 }
+
+typealias StatelessTask = FileImportTask<Unit>

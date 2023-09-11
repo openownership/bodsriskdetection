@@ -18,6 +18,7 @@ import org.bodsrisk.rdf.localNames
 import org.eclipse.rdf4j.query.BindingSet
 import org.kbods.read.BodsStatement
 import org.kbods.read.BodsStatementType
+import org.slf4j.LoggerFactory
 
 @Singleton
 class BodsService(
@@ -63,20 +64,50 @@ class BodsService(
         }
     }
 
-    fun getStatements(statementIds: Collection<String>): List<BodsStatement> {
-        return esClient.findByTerms<JsonData>(OpenOwnershipDataset.INDEX, FIELD_STATEMENT_ID, statementIds)
-            .map { BodsStatement(it.source()!!.toJson().toString()) }
+    fun getStatements(statementIds: Collection<String>): Map<String, BodsStatement> {
+        val statements = mutableMapOf<String,BodsStatement>()
+        esClient.findByTerms<JsonData>(OpenOwnershipDataset.INDEX, FIELD_STATEMENT_ID, statementIds)
+            .forEach {
+                statements[it.id()] = BodsStatement(it.source()!!.toJson().toString())
+            }
+
+        if (statements.size < statementIds.size) {
+            // We might have replaced statements, so we try to resolve the remaining from their replacement
+            // This isn't ideal and poorly performing so the whole replacesStatements needs more thought
+            val resolvedIds = statements.map { it.key }
+            val unresolvedIds = statementIds.filter { it !in resolvedIds }
+            val resolvedFromReplacements = esClient
+                .findByTerms<JsonData>(OpenOwnershipDataset.INDEX, FIELD_REPLACES_STATEMENTS, unresolvedIds)
+                .associate {
+                    val statement = BodsStatement(it.source()!!.toJson().toString())
+                    val oldId = statement.replacesStatements.first { id -> id in unresolvedIds }
+                    oldId to statement
+                }
+            log.info("Needed to resolve ${unresolvedIds.size} from replacements: ${unresolvedIds.joinToString(", ")}")
+            log.info("${resolvedFromReplacements.size} Resolved from replacements: ")
+            resolvedFromReplacements.forEach { (id, statement) ->
+                log.info("\t${id} -> ${statement.id}")
+            }
+            statements.putAll(resolvedFromReplacements)
+
+//            val stillUnresolved = unresolvedIds.filter { statements.none { st -> st.id == it } }.joinToString(", ")
+//            log.info("Resolved ${resolvedFromReplacements.size}/${unresolved.size} statements from their replacements: ${resolvedFromReplacements.joinToString { it.id }}. " +
+//                    "Still unresolved: $stillUnresolved"
+//            )
+        }
+        return statements
     }
 
     fun getStatements(sparqlBindings: Collection<BindingSet>, vararg fields: String): Map<String, BodsStatement> {
         return getStatements(sparqlBindings.localNames(*fields))
-            .associateBy { it.id }
     }
 
     companion object {
         private const val FIELD_ALL_NAMES = "allNames"
         private const val FIELD_STATEMENT_ID = "statementID"
         private const val FIELD_STATEMENT_TYPE = "statementType"
+        private const val FIELD_REPLACES_STATEMENTS = "replacesStatements"
         private const val PREFIX_STATEMENT_ID = "openownership-register"
+        private val log = LoggerFactory.getLogger(BodsService::class.java)
     }
 }

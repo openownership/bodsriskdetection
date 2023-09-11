@@ -7,6 +7,7 @@ import org.bodsrisk.data.opensanctions.entityType
 import org.bodsrisk.model.graph.Relationship
 import org.bodsrisk.rdf.vocabulary.FTM
 import org.bodsrisk.utils.toKlaxonJson
+import org.eclipse.rdf4j.model.IRI
 import org.kbods.rdf.BodsRdf
 import org.kbods.rdf.iri
 import org.kbods.read.BodsStatement
@@ -22,17 +23,17 @@ internal val BodsStatementType.entityType: EntityType
         }
     }
 
-internal fun BodsStatement.toEntity(): Entity {
+internal fun BodsStatement.toEntity(iri : IRI = this.iri()): Entity {
     return when (this.statementType.entityType) {
         EntityType.LEGAL_ENTITY -> LegalEntity(
-            iri = this.iri(),
+            iri = iri,
             name = this.name,
             source = DataSource.OpenOwnership,
             registrationNumber = this.identifier("GB-COH"),
             jurisdiction = this.jurisdictionCode?.let { Country.byCode(it) })
 
         EntityType.PERSON -> Person(
-            iri = this.iri(),
+            iri = iri,
             name = this.name,
             source = DataSource.OpenOwnership,
             dateOfBirth = this.json.string("birthDate"),
