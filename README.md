@@ -110,6 +110,12 @@ To start the application, run
 ./run.sh
 ```
 
+**Please note** The first time the application is run it can take several minutes to start.
+Upon successful startup the application will print a message similar to this:
+```shell
+20:31:20.652 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 314870ms. Server Running: http://localhost:8080
+```
+
 Once the application is started it will be accessible at http://localhost:8080/.
 
 ### Datasets in this PoC
