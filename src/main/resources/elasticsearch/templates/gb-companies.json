@@ -1,0 +1,27 @@
+{
+    "index_patterns": ["gb-company-refs*"],
+    "template": {
+        "mappings": {
+            "date_detection": false,
+            "properties": {
+                "name": {
+                    "type": "text"
+                },
+                "registrationNumber": {
+                    "type": "keyword"
+                },
+                "allNames": {
+                    "type": "keyword"
+                },
+                "registeredAddress": {
+                    "type": "object",
+                    "properties": {
+                        "hash": {
+                            "type": "keyword"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

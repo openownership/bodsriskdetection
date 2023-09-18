@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+
+    <link rel="icon" type="image/x-icon" href="/images/logo.svg">
+
+    <title>{{ pageTitle }} | BODS Risk</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@100;200;300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap">
+
+    <link rel="stylesheet" href="/css/style.{{ envProperty("app.version") }}.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.4/d3.min.js"></script>
+    <script src="/js/app.{{ envProperty("app.version") }}.js"></script>
+</head>
+
+<body class="w-full flex flex-col items-center">
+<div class="bg-header text-white flex flex-col items-center px-4 w-full">
+    <div class="flex flex-row w-full max-w-screen-lg px-8">
+        <div class="flex flex-row items-center gap-4">
+            <img src="/images/open-ownership-logo.svg" width="32"/>
+            <div class="font-semibold text-xl">BODS Risk Detection</div>
+        </div>
+        <div class="flex flex-row items-center gap-0.5 header-menu ml-12">
+            <a href="/search" class="item {{ headerMenuItem == 'Search' ? 'selected' : '' }}">Search</a>
+            <a href="/examples" class="item {{ headerMenuItem == 'Examples' ? 'selected' : '' }}">Examples</a>
+        </div>
+    </div>
+</div>
+<div class="w-full h-full flex flex-col items-center pb-48">
+    {% block pageContent %} {% endblock %}
+</div>
+</body>
+
+</html>

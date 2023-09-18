@@ -1,0 +1,14 @@
+PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bods:  <http://bods.openownership.org/vocabulary/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+PREFIX onto:  <http://www.ontotext.com/>
+
+SELECT ?parent ?child ?controlStatement
+WHERE {
+    ?ultimateParent bods:ownsOrControls* ?parent .
+    ?controlStatement bods:hasInterestedParty ?parent .
+    ?controlStatement bods:hasSubject ?child .
+    FILTER(STRSTARTS(STR(?parent), STR(bodsr:)))
+    FILTER(STRSTARTS(STR(?child), STR(bodsr:)))
+}
+GROUP BY ?parent ?child ?controlStatement

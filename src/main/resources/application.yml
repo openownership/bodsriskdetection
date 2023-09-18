@@ -1,0 +1,27 @@
+app:
+  version: @APP_VERSION@
+  elasticsearch:
+    host: ${ELASTICSEARCH_HOST}
+    port: ${ELASTICSEARCH_PORT}
+    username: ${ELASTICSEARCH_USERNAME}
+    password: ${ELASTICSEARCH_PASSWORD}
+  rdf:
+    connection-url: ${GRAPHDB_URL}
+    username: ${GRAPHDB_USERNAME}
+    password: ${GRAPHDB_PASSWORD}
+  data-import:
+    run-at-startup: true
+
+micronaut:
+  views:
+    folder: views
+    pebble:
+      default-extension: peb
+  router:
+    static-resources:
+      main:
+        paths: classpath:static
+        mapping: /**
+  data:
+    pageable:
+      default-page-size: 10

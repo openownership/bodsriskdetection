@@ -1,0 +1,17 @@
+app:
+  elasticsearch:
+    host: localhost
+    port: 9200
+    username: elastic
+    password: "rnrhMyUcX1LRRl7OcxzH"
+  rdf:
+    connection-url: http://localhost:7200
+    username: admin
+    password: admin
+#  data-import:
+#    importer-names: OpenOwnershipDataset
+
+micronaut:
+  views:
+    pebble:
+      cache-active: false

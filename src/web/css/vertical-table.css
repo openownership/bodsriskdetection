@@ -1,0 +1,16 @@
+table.vertical-table {
+    @apply text-sm;
+    border-spacing: 0;
+}
+
+table.vertical-table td {
+    @apply pr-4;
+}
+
+table.vertical-table tr td:first-child {
+    @apply text-label whitespace-nowrap;
+}
+
+table.vertical-table tr td:not(:first-child) {
+    @apply w-full;
+}

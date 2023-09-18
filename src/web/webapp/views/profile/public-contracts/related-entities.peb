@@ -1,0 +1,48 @@
+{% extends "profile/public-contracts/layout" %}
+{% set selectedView = 'Subsidiaries' %}
+
+{% block publicContracts %}
+    <div>
+        {% if not relatedEntities.isEmpty() %}
+            <div class="text-lg">
+                {{ plural(relatedEntities.size, "Company", "Companies") }}, {{ plural(totalContracts, "Contract", "Contracts") }}
+                with a total value of
+                <span class="font-semibold">{{ currencyValue(totalValue, "GBP") }}</span>
+            </div>
+
+            <table class="data-listing mt-6">
+                <tr class="header">
+                    <td width="100%">Entity</td>
+                    <td>Number of contracts</td>
+                    <td>Total value</td>
+                    <td>Relationship</td>
+                </tr>
+                {% for relatedEntity in relatedEntities %}
+                    <tr>
+                        <td class="font-semibold">
+                            <a href="/profile/{{ relatedEntity.entity.id | urlencode }}/risks">
+                                {{ relatedEntity.entity.name }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/profile/{{ relatedEntity.entity.id | urlencode }}/public-contracts">
+                                {{ plural(relatedEntity.data.contracts.size, "Contract", "Contracts") }}
+                            </a>
+                        </td>
+                        <td align="right">{{ currencyValue(relatedEntity.data.totalValue, "GBP") }}</td>
+                        <td class="whitespace-nowrap">
+                            {% set url = "/relationships/chain/#{target.id}/relationship/#{relatedEntity.id}" %}
+                            <a href="#" class="text-sm"
+                               onclick="explainRelationshipModal('{{ target.id }}', '{{ relatedEntity.relationship }}', '{{ relatedEntity.entity.id }}', '{{ relatedEntity.intermediateEntity }}'); return false;">
+                                {{ relatedEntity.relationshipLabel(target.type) }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="text-sm text-label">No public contracts found for subsidiaries</div>
+        {% endif %}
+
+    </div>
+{% endblock %}

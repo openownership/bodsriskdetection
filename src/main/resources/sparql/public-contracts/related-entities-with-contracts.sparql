@@ -1,0 +1,11 @@
+PREFIX ftm: <https://w3id.org/ftm#>
+PREFIX bods: <http://bods.openownership.org/vocabulary/>
+PREFIX bodsr: <http://bods.openownership.org/resource/>
+PREFIX bodsrisk: <http://bods.openownership.org/risk/>
+
+SELECT DISTINCT ?entity
+WHERE {
+    ?target bods:ownsOrControls+ ?entity .
+    ?entity bodsrisk:awardedPublicContract ?contract .
+    FILTER(STRSTARTS(STR(?entity), STR(bodsr:)))
+}

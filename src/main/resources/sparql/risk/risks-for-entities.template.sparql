@@ -1,0 +1,8 @@
+PREFIX bodsrisk: <http://bods.openownership.org/risk/>
+
+SELECT ?entity (GROUP_CONCAT(DISTINCT ?risk;separator=",") as ?risks)
+WHERE {
+    VALUES ?entity { ENTITIES }
+    ?entity bodsrisk:hasRisk ?risk .
+}
+GROUP BY ?entity

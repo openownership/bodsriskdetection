@@ -1,0 +1,37 @@
+categories:
+
+    - name: Public contracts
+      description: Entities awarded public contracts or are controlling companies which have been awarded public contracts
+      links:
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-915297318422064135/public-contracts/related-entities
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-3052563191523192992/public-contracts
+
+    - name: Indirect risks - PEP/Sanctions
+      description: PEP/Sanctions risks identified against entities related to a target (relatives, associates, etc.)
+      links:
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-13320726517544098931/risks
+
+    - name: Indirect risks - Address
+      description: Companies having the same registered address as other entities with risk
+      links:
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-18078977022465671411/risks
+
+    - name: UBOs
+      description: Network view of a company's UBOs
+      links:
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-1106385726311949066/ubos
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-12337862642105981237/ubos
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-1832718095314809879/ubos
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-3744925173188199607/ubos
+
+    - name: Ultimate parents
+      description: All the companies with direct or indirect control over a target (company)
+      links:
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-12337862642105981237/ultimate-parents
+
+    - name: Subsidiaries
+      description: All the companies controlled directly or indirectly by a target (company)
+      links:
+        - /profile/http%3A%2F%2Fbods.openownership.org%2Fresource%2Fopenownership-register-7419447142773275779/child-companies
+
+

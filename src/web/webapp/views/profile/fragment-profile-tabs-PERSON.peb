@@ -1,0 +1,4 @@
+<a href="/profile/{{ target.id | urlencode }}/risks" class="{{ selectedTab == 'Risks' ? 'selected' : '' }}">Risks</a>
+<a href="/profile/{{ target.id | urlencode }}/public-contracts/related-entities"
+   class="{{ selectedTab == 'Public contracts' ? 'selected' : '' }}">Public contracts</a>
+<a href="/profile/{{ target.id | urlencode }}/child-companies" class="{{ selectedTab == 'child-companies' ? 'selected' : '' }}">Controlled companies</a>

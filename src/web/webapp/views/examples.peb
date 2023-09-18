@@ -1,0 +1,23 @@
+{% extends "layout-base" %}
+{% set pageTitle = 'Examples' %}
+{% set headerMenuItem = 'Examples' %}
+
+{% block pageContent %}
+    <div class="flex flex-col items-start w-full max-w-screen-md mt-10">
+
+        <h1>BODS Risk Detection examples</h1>
+        {% for category in categories %}
+            <div class="flex flex-col mt-8">
+                <h2>{{ category.name }}</h2>
+                <div class="text-sm text-label">{{ category.description }}</div>
+                <div class="flex flex-col mt-2">
+                    {% for link in category.links %}
+                        <div>
+                            <a href="{{ link }}" target="_blank">Example {{ loop.index + 1 }}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

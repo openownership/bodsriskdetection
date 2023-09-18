@@ -1,0 +1,91 @@
+{% extends "layout-base" %}
+{% set pageTitle = 'Search' %}
+{% set headerMenuItem = 'Search' %}
+
+{% import "macros/utils.peb" %}
+{% import "macros/pagination.peb" %}
+
+{% macro searchInput(_context) %}
+    <div class="search">
+        <input type="text" name="q" value="{{ _context.q }}"
+               placeholder="Company name or person name" {% if _context.emptyState %} autofocus {% endif %}/>
+        <button type="submit" class="group p-4">
+            {{ inlineSvg("search.svg", "w-6 h-6 fill-gray-400 group-hover:fill-control") }}
+        </button>
+    </div>
+{% endmacro %}
+
+{% block pageContent %}
+    {% if emptyState %}
+        <div class="flex flex-col items-center w-full gap-12 mt-16">
+            <h1 class="font-title">Search legal entities or people</h1>
+            <form action="/search" method="GET" class="w-full flex flex-col items-center">
+                {{ searchInput(_context) }}
+            </form>
+        </div>
+    {% else %}
+        <div class="flex flex-col items-start w-full max-w-screen-md mt-10">
+            <form action="/search" method="GET" class="w-full flex flex-row items-center justify-between">
+                {{ searchInput(_context) }}
+            </form>
+            {% if page.totalSize > 0 %}
+                <div class="flex flex-col items-start w-full max-w-screen-md">
+
+                    <div class="flex flex-row items-center justify-between w-full mt-4">
+                        <div class="text-slate-500 text-sm">Showing results {{ page.pageable.offset + 1 }}
+                            to {{ page.pageable.size + page.pageable.offset }} of {{ page.totalSize }}
+                        </div>
+                        <div class="switch">
+                            <a href="{{ request.addParams({"entityType":null, "page": null}) }}"
+                               class="{{ entityType == null ? 'selected' : '' }}">All
+                            </a>
+                            <a href="{{ request.addParams({"entityType":'PERSON', "page": null}) }}"
+                               class="{{ entityType.name == 'PERSON' ? 'selected' : '' }}">
+                                People
+                            </a>
+                            <a href="{{ request.addParams({"entityType":'LEGAL_ENTITY', "page": null}) }}"
+                               class="{{ entityType.name == 'LEGAL_ENTITY' ? 'selected' : '' }}">
+                                Entities
+                            </a>
+                        </div>
+                    </div>
+
+                    <table class="data-listing mt-10 no-header">
+                        {% for entity in page %}
+                            <tr>
+                                <td>
+                                    <div class="flex flex-col">
+                                        <div class="flex flew-row items-start justify-between">
+                                            <div class="flex flex-col">
+                                                <a href="/profile/{{ entity.id | urlencode }}/risks">
+                                                    {{ entityHeader(entity) }}
+                                                </a>
+                                                <div class="flex flex-col items-start gap-1 ml-10 text-xs text-label mt-1">
+                                                    {% if entity.type.name == 'PERSON' %}
+                                                        <div class="font-light">Born
+                                                            <span class="font-medium">{{ entity.dateOfBirth }}</span>
+                                                        </div>
+                                                        <div class="font-light">{{ nationalities(entity) }}</div>
+                                                    {% endif %}
+
+                                                    {% if entity.type.name == 'LEGAL_ENTITY' and entity.jurisdiction != null %}
+                                                        <div>{{ entity.jurisdiction.name }}</div>
+                                                        <div>{{ entity.registrationNumber }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {{ paginationControl(page, containerCss = "mt-8 flex flex-row items-center justify-center w-full gap-0.5") }}
+
+            {% else %}
+                <div class="mt-8">No results found for query <span class="font-semibold">{{ q }}</span></div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

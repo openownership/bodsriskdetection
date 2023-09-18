@@ -1,0 +1,9 @@
+{% extends "profile/public-contracts/layout" %}
+{% set selectedView = 'Network' %}
+{% set wide = true %}
+
+{% import "macros/network.peb" %}
+
+{% block publicContracts %}
+    {{ tree(content, "No public contracts data", false, "h-screen") }}
+{% endblock %}
