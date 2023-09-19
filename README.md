@@ -57,7 +57,7 @@ for a graph (RDF) database, which in turn becomes the most important constraint 
 The problem is then about reflecting a document (JSON) as a set of RDF triples. While it's entirely possible
 to persist a complete record using RDF, this is an exercise that has several drawbacks:
 1. It requires a substantive amount data modeling for creating an RDF vocabulary from a JSON schema (which isn't always available).
-2. It produces a high number of triples will affect the size and performance the RDF triple store.
+2. It produces a high number of triples which will affect the size and performance the RDF triple store.
 3. Querying document-like structures via an RDF database is unsuitable and costly.
 
 For these reasons, it made sense for the purposes of this PoC to use two separate storage
@@ -65,17 +65,19 @@ solutions for the two data retrieval patterns:
 [Elasticsearch](https://www.elastic.co/elasticsearch/) and [GraphDB](https://www.ontotext.com/products/graphdb/).
 
 With this approach, we've created a data ingestion process which can handle both these aspects:
-* Import the complete document (JSON) record in Elasticsearch
+* Import the complete document (JSON) record in Elasticsearch, so they're available via search/filters/get-by-id.
 * Convert and import only the elements of the JSON (or CSV) record which are relevant to graph/network traversal: mainly unique references (IDs/URIs) and relationships.
 
 Finally, the compromise was about sacrificing query performance in favour of simplicity.
 The way the system works is by first identifying the
-complex ownership structure and relationships using SPARQL (graph) queries. With the entities identified, we then perform
+complex ownership structure and relationships using SPARQL (graph) queries.
+
+With URIs/IDs of the entities in the SPARQL result set we then perform
 a bulk de-referencing of the complete records from the document store (Elasticsearch) in order to produce the relevant fields
-required by the application.
+required by the application (name, address, DOB, etc.)
 
 It's important to note this is a design choice that was suitable for our PoC and for testing the solution against the types
-of problems we're showcasing. We don't claim for any of this to be suitable for a production-grade system.
+of problems we're showcasing. We don't claim for any of this to be suitable for a production-grade system without further analysis.
 
 ## Running the application
 ### Prerequisites
@@ -86,8 +88,8 @@ of problems we're showcasing. We don't claim for any of this to be suitable for 
 This PoC uses [Graph DB](https://www.ontotext.com/products/graphdb/) and [Elasticsearch 8](https://www.elastic.co/elasticsearch/)
 to import and process the relevant sources as RDF statements and JSON documents.
 
-These have been wired using the official Docker image for each of these databases and images with the fullly ingested
-datasets are available via Docker Hub.
+These have been wired using the official Docker image for each of them. We have also published Docker images
+containing the fully ingested datasets via Docker Hub.
 
 A script in `devops/docker` is used to download the full docker images and startup the containers:
 ```shell
@@ -104,8 +106,8 @@ Once this process completes, you should get the following message:
 ```
  
 ### Starting the application
-The application is built and run using Gradle, and it's wired to run locally using the above Docker images.
-To start the application, run
+The application is built and run using Gradle, and it's configured by default to use the above Docker images.
+To start the application, run the following from the project directory:
 ```shell
 ./run.sh
 ```
@@ -116,15 +118,15 @@ Upon successful startup the application will print a message similar to this:
 20:31:20.652 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 314870ms. Server Running: http://localhost:8080
 ```
 
-Once the application is started it will be accessible at http://localhost:8080/.
+Once the application is started it will be available at http://localhost:8080/.
 
-### Datasets in this PoC
+## Datasets in this PoC
 * [Open Ownership Register](https://register.openownership.org/download)
 * [OpenSanctions](https://www.opensanctions.org/datasets/) default dataset
 * [UK Public Contracts data](https://www.contractsfinder.service.gov.uk)
 * [ICIJ Offshore Leaks](https://offshoreleaks.icij.org/)
 
-### Importing data in an empty database
+## Importing data in an empty database
 Please note that the import process takes several hours and it shouldn't be required
 unless you are also performing code changes that affect how data is ingested and processed.
 

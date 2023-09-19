@@ -75,7 +75,7 @@ The major impediments are company identifiers, which are scarce and inconsistent
 awards records include Companies House registration numbers (in the form GB-COH-00946107 where 00946107 is a company's registration
 number in the UK).
 
-This makes record linking a very complex problem which. In a real-world application relying on UK public procurement data,
+This makes record linking a very complex problem. In a real-world application relying on UK public procurement data,
 one would have to devise algorithms based on company names and addresses, which themselves aren't always consistent.
 
 It's important to note that this PoC is relying exclusively on the small subset of Contracts Finder records where
