@@ -71,7 +71,7 @@ An example SPARQL query for this logic is available [here](https://github.com/op
 UK has made significant progress in making public procurement more transparent. However, there is still
 a way to go in making the data easy to process and link by automated systems.
 
-The major impediments are company identifiers, which are scarce and inconsistent. Only around 20% of the Contracts Finder
+The major impediments are company identifiers, which are scarce and inconsistent. Only around 25% of the Contracts Finder
 awards records include Companies House registration numbers (in the form GB-COH-00946107 where 00946107 is a company's registration
 number in the UK).
 
