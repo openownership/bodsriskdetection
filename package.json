@@ -34,7 +34,7 @@
     "jquery": "^3.7.0",
     "jquery-browserify": "^1.8.1",
     "jsdom": "^22.1.0",
-    "postcss": "^8.4.16",
+    "postcss": "^8.4.31",
     "properties-reader": "^2.2.0",
     "vinyl": "^3.0.0",
     "vinyl-buffer": "^1.0.1",
